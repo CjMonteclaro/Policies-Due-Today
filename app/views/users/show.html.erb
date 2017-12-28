@@ -1,0 +1,38 @@
+<fieldset class="col-md-7">
+     <legend>User Information</legend>
+
+     <div class="panel panel-default">
+       <div class="panel-body">
+           <div class="form-border">
+               <strong>User ID:</strong>
+               <%= @user.id %>
+           </div>
+
+           <div class="form-border">
+               <strong>User Name:</strong>
+               <%= @user.username %>
+           </div>
+
+           <div class="form-border">
+               <strong>Email Address:</strong>
+               <%= @user.email %>
+           </div>
+
+           <div class="form-border">
+               <strong>Full Name:</strong>
+               <%= @user.profile.full_name if @user.profile %>
+           </div>
+
+           <div class="form-border">
+               <strong>Role:</strong>
+               <% @user.roles.each do |role| %>
+                 <%= role.name %>
+               <% end %>
+           </div>
+       </div>
+     </div>
+
+     <%= link_to 'Edit', edit_user_path(@user), class: "btn btn-info"  %> |
+     <%= link_to 'Back', users_path , class: "btn btn-info"  %>
+
+</fieldset>

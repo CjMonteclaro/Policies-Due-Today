@@ -1,0 +1,163 @@
+<div class="row">
+  <div class="col-md-10">
+    <%= content_tag :h1, "Account Resolution Details" %>
+      <fieldset class="col-md-10">
+         <legend>Request Approval For</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <div class="form-border">
+               <strong>Request Type:</strong>
+               <%= @policy_resolution.request_type %></td>
+             </div>
+
+             <div class="form-border">
+               <strong>Extension:</strong>
+               <%= @policy_resolution.extension %>
+             </div>
+
+             <div class="form-border">
+                <strong>Cancelled:</strong>
+                <%= @policy_resolution.cancelled %>
+             </div>
+
+             <div class="form-border">
+                <strong>Reinstated:</strong>
+               <%= @policy_resolution.reinstated %>
+             </div>
+
+           </div>
+         </div>
+
+         <legend>Account Summary</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <div class="form-border">
+               <strong>Intermediary no:</strong>
+               <%= @policy_resolution.intermediary_id %>
+             </div>
+
+             <div class="form-border">
+               <strong>Intermediary name:</strong>
+               <%= @policy_resolution.intermediary_name %>
+             </div>
+
+             <div class="form-border">
+               <strong>Credit term:</strong>
+               <%= @policy_resolution.credit_term %>
+             </div>
+
+             <div class="form-border">
+               <strong>Premium due:</strong>
+               <%= format_currency(@policy_resolution.premium_due) %>
+             </div>
+           </div>
+         </div>
+
+         <legend>Policy Information</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <div class="form-border">
+               <strong>Policy ID:</strong>
+               <%= @policy_resolution.policy_id %>
+             </div>
+
+             <div class="form-border">
+               <strong>Policy no:</strong>
+               <%= @policy_resolution.policy_no %>
+             </div>
+
+             <div class="form-border">
+               <strong>Endorsement no:</strong>
+               <%= @policy_resolution.endt_no %>
+             </div>
+
+             <div class="form-border">
+               <strong>Assured no:</strong>
+               <%= @policy_resolution.assured_id %>
+             </div>
+
+             <div class="form-border">
+               <strong>Effective date:</strong>
+               <%= @policy_resolution.effective_date %>
+             </div>
+
+             <div class="form-border">
+               <strong>Orig due date:</strong>
+               <%= @policy_resolution.orig_due %>
+             </div>
+
+             <div class="form-border">
+               <strong>New due date:</strong>
+               <%= @policy_resolution.new_due %>
+             </div>
+           </div>
+         </div>
+
+          <legend>Form of Payment</legend>
+
+          <div class="card">
+            <div class="card-body">
+              <div class="form-border">
+                <strong>Payment Type:</strong>
+                <%= @policy_resolution.payment_type %>
+              </div>
+
+              <div class="form-border">
+                <strong>Payment Amount:</strong>
+                <%= @policy_resolution.payment_amount %>
+              </div>
+
+              <div class="form-border">
+                <strong>Payment Date:</strong>
+                <%= @policy_resolution.payment %>
+              </div>
+            </div>
+          </div>
+
+         <legend>Remarks</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <div class="form-border">
+               <!-- <strong>Remarks:</strong> -->
+               <%= @policy_resolution.remarks %>
+             </div>
+           </div>
+         </div>
+
+         <legend>Prepared By</legend>
+
+         <div class="card">
+           <div class="card-body">
+               <div class="form-border">
+                 <!-- <strong>Prepared by:</strong> -->
+                 <%= @policy_resolution.user&.profile&.full_name %>
+               </div>
+           </div>
+         </div>
+
+         <div class="card">
+           <div class="card-body">
+               <legend><h1>Approvals</h1></legend>
+               <%= simple_form_for @approval, url: approvals_path(id: @policy_resolution.id), method: :post do |f| %>
+               <%= f.input :remarks %>
+               <%= f.button :submit, "Reviewed" if current_user.profile.profile_rank == 'Regular' %>
+               <%= f.button :submit, "Noted" if current_user.profile.profile_rank == 'Medium' %>
+               <%= f.button :submit, "Approved" if current_user.profile.profile_rank == 'High'  %>
+               <% end %>
+           </div>
+         </div><br>
+         <%= link_to 'Edit', edit_policy_resolution_path(@policy_resolution) , class: "btn btn-info"  %>
+         <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info"  %>
+       </fieldset>
+
+
+  </div>
+
+
+
+
+</div>

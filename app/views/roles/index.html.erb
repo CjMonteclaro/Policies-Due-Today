@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Roles</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @roles.each do |role| %>
+      <tr>
+        <td><%= role.id %></td>
+        <td><%= role.name %></td>
+        <td><%= link_to 'Show', role , class: "btn btn-info" %></td>
+        <td><%= link_to 'Edit', edit_role_path(role) , class: "btn btn-info" %></td>
+        <td><%= button_to 'Destroy', role, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info"  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Role', new_role_path , class: "btn btn-info" %>
+
+<br><%= page_entries_info @roles %><br>
+<%= paginate @roles, theme: 'twitter-bootstrap-4' %>

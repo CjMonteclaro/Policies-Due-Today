@@ -1,0 +1,36 @@
+<fieldset class="col-md-10">
+     <legend>Approval Information</legend>
+
+     <div class="panel panel-default">
+       <div class="panel-body">
+           <div class="form-border">
+             <strong>Policy resolution:</strong>
+             <%= @approval.policy_resolution_id %>
+           </div>
+
+           <div class="form-border">
+             <strong>Approval type:</strong>
+             <%= @approval.approval_type %>
+           </div>
+
+           <div class="form-border">
+             <strong>Approver:</strong>
+             <%= @approval.approver_id %>
+           </div>
+
+           <div class="form-border">
+             <strong>Approved Date:</strong>
+             <%= @approval.approved %>
+           </div>
+
+           <div class="form-border">
+             <strong>Remarks:</strong>
+             <%= @approval.remarks %>
+           </div>
+
+       </div>
+     </div>
+
+     <%= link_to 'Edit', edit_approval_path(@approval) , class: "btn btn-info" %> |
+     <%= link_to 'Back', approvals_path , class: "btn btn-info" %>
+</fieldset>

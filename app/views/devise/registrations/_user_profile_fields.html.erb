@@ -1,0 +1,8 @@
+<%= f.fields_for :profile do |pf| %>
+  <%= pf.input :first_name %>
+  <%= pf.input :last_name %>
+  <%= pf.input :department, collection: ["Accounting","Claims","Marketing","MIS","Underwriting"] %>
+  <%= pf.input :rank, collection: ["President","Chairman","SVP","VP","AVP","Supervisor","Manager","Regular User", "Admin"] %>
+  <%= pf.input :effectivity %>
+  <%= pf.input :deactivation %>
+<% end %>

@@ -1,0 +1,45 @@
+octopus:
+  environments:
+    - development
+    - production
+
+  development:
+    shard_one:
+        adapter: oracle_enhanced
+        username: CPI
+        password: CPI12345!
+        host: 172.16.110.31
+        port: 1521
+        database: FTEST
+
+    shard_two:
+        adapter: mysql2
+        database: fgen_test
+        username: root
+        password: fortune
+        host: localhost
+        port: 3306
+
+        # adapter: mysql2
+        # database: <%= ENV['RDS_DB_NAME'] %>
+        # username: <%= ENV['RDS_USERNAME'] %>
+        # password: <%= ENV['RDS_PASSWORD'] %>
+        # host: <%= ENV['RDS_HOSTNAME'] %>
+        # port: <%= ENV['RDS_PORT'] %>
+
+  production:
+    shard_one:
+        adapter: oracle_enhanced
+        username: CPI
+        password: CPI12345!
+        host: 172.16.110.31
+        port: 1521
+        database: FTEST
+
+    shard_two:
+      adapter: mysql2
+      database: <%= ENV['RDS_DB_NAME'] %>
+      username: <%= ENV['RDS_USERNAME'] %>
+      password: <%= ENV['RDS_PASSWORD'] %>
+      host: <%= ENV['RDS_HOSTNAME'] %>
+      port: <%= ENV['RDS_PORT'] %>

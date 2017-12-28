@@ -1,0 +1,82 @@
+
+<h1>Account Resolutions</h1>
+
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr>
+          <th>Request Type</th>
+          <th class="col-md-4">Policy Details</th>
+          <th>Premium due</th>
+          <th>Orig Credit Term</th>
+          <th>Requested Resolution/s</th>
+          <th>Remedial Payment/s</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+    </thead>
+
+    <tbody>
+      <% @policy_resolutions.each do |policy_resolution| %>
+        <tr>
+
+          <!-- Account Resolution Information -->
+          <td>
+            <%= content_tag :p, policy_resolution.id, class: 'muted' %>
+            <%= content_tag :p, policy_resolution.request_type, class: 'lead' %>
+          </td>
+
+          <!-- Policy Details -->
+          <td class="col-md-4">
+            <%= ar_format_helper("ID", policy_resolution.policy_id, 1) %>
+            <%= ar_format_helper("Policy Number", policy_resolution.policy_no, 1) %>
+
+            <div class="bg-primary text-white">
+              <%= ar_format_helper("Endorsement", policy_resolution.endt_no, 1) if policy_resolution.endt_no.present? %> <!-- , class: 'bg-primary' -->
+            </div>
+
+            <%= ar_format_helper("Intermediary", policy_resolution.intermediary_name, 1) %>
+            <%= ar_format_helper("Effectivity", policy_resolution&.effective_date, 3) %>
+          </td>
+
+          <!-- Premium Due -->
+          <td><%= content_tag :p, format_currency(policy_resolution.premium_due) %></td>
+
+          <!-- Orig Credit Term -->
+          <td>
+            <%= content_tag :p, format_days(policy_resolution.credit_term) %>
+            <%= ar_date_helper("Original Due Date", policy_resolution.orig_due) %>
+          </td>
+
+          <!-- Requested Resolution/s -->
+          <td>
+            <%= content_tag :p, format_days(policy_resolution.extension) %>
+            <%= ar_date_helper("New Due Date", policy_resolution.new_due) %>
+            <%= ar_date_helper("Cancellation Date", policy_resolution.cancelled) %>
+            <%= ar_date_helper("Reinstatement Date", policy_resolution.reinstated) %>
+          </td>
+
+          <!-- Remedial Payment/s -->
+          <td>
+            <%= ar_format_helper("Payment Type", policy_resolution.payment_type, 1) %>
+            <%= ar_format_helper("Payment Amount", policy_resolution.payment_amount, 2) %>
+            <%= ar_format_helper("Payment Date", policy_resolution.payment, 3) %>
+          </td>
+
+          <td><%= link_to 'Show', policy_resolution , class: "btn btn-info"  %></td>
+          <td><%= link_to 'Edit', edit_policy_resolution_path(policy_resolution, genweb_id: policy_resolution.policy_id) , class: "btn btn-info"  %></td>
+          <td><%= button_to 'Destroy', policy_resolution, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info"  %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</div>
+
+<br>
+
+<%= link_to 'New Policy Resolution', new_policy_resolution_path , class: "btn btn-info"  %>
+<%= link_to "Back to Policies Due Today", policies_due_today_path, class: "btn btn-info"  %>
+
+<br><%= page_entries_info @policy_resolutions %><br>
+<%= paginate @policy_resolutions, theme: 'twitter-bootstrap-4' %>

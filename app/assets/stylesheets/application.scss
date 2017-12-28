@@ -1,0 +1,39 @@
+@import "bootstrap";
+
+
+.pagination {
+    font-size: 15px;
+}
+
+.pagination > * {
+    margin-right: 0.1em;
+    padding: 0.3em 0.4em;
+}
+
+.pagination a:hover {
+    background: #00ddff none repeat scroll 0 0;
+    text-shadow: 1px 1px 1px #171717;
+    color: white;
+}
+
+.pagination a:active {
+    text-shadow: none;
+}
+
+.pagination .current {
+    background: #00ddff none repeat scroll 0 0;
+    color: white;
+    text-shadow: 1px 1px 1px #171717;
+}
+
+.pagination .disabled {
+    color: #C0C0C0;
+}
+div.form-border {
+    height: 40px;
+    width: 100%;
+    padding: 10px;
+    border:1px solid lightgrey;
+    border-radius: 5px;
+    border-width: 1px;
+}

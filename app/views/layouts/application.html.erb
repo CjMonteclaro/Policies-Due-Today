@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <%= content_for?(:title) ? "#{ yield(:title) } | FGen".html_safe : "FGen Dashboards" %>
+    </title>
+
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<!-- && controller.controller_name == "Devise::SessionsController" -->
+  </head>
+
+  <body>
+    <%= render 'layouts/navbar' %>
+
+    <div class="container">
+      <%= render 'layouts/flash_messages' %>
+      <%= render 'layouts/page_title' %>
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

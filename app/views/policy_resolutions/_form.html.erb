@@ -1,0 +1,144 @@
+<%= simple_form_for(@policy_resolution) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="row mt-4">
+
+    <fieldset class="col-md-10">
+         <legend>Request Approval For</legend>
+
+         <div class="card">
+           <div class="card-body">
+              <%= f.input :request_type, collection: ["Extension","Cancellation","Reinstate"] , as: :radio_buttons , :label => "Request Type" , wrapper_class: "form-check", item_wrapper_class: "form-check-label"%>
+              <%= f.input :extension , :placeholder => 'No. of days to extend.', :label => "Extension" %>
+              <%= f.input :cancelled, :include_blank => true , :label => "Cancelled Date" %>
+              <%= f.input :reinstated , :include_blank => true , :label => "Reinstated Date" %>
+
+           </div>
+         </div>
+
+         <legend>Account Summary</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <p>
+               <strong>Intermediary ID</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, @policy.intermediary&.intm_no %>
+                </div>
+               <%= f.input :intermediary_id, as: :hidden, input_html: {value: @policy.intermediary&.intm_no} %>
+             </p>
+
+              <p>
+                <strong>Intermediary Name</strong>
+                  <div class="form-border">
+                    <%= content_tag :h6, @policy.intermediary&.name %>
+                  </div>
+                <%= f.input :intermediary_name, as: :hidden, input_html: {value: @policy.intermediary&.name} %>
+              </p>
+
+              <p>
+                <strong>Credit Term</strong>
+                  <div class="form-border">
+                    <%= content_tag :h6, @policy.intermediary&.credit_term %>
+                  </div>
+                <%= f.input :credit_term, as: :hidden, input_html:{ value: @policy.intermediary.credit_term} %>
+              </p>
+
+              <p>
+                <strong>Premium Recievable</strong>
+                  <div class="form-border">
+                    <%= content_tag :h6, @policy.policy_invoice&.gross_premium %>
+                  </div>
+                  <%= f.input :premium_due, as: :hidden, input_html:{ value: @policy.policy_invoice&.gross_premium} %>
+              </p>
+           </div>
+         </div>
+
+         <legend>Policy Information</legend>
+
+         <div class="card">
+           <div class="card-body">
+             <p>
+               <strong>Policy ID</strong>
+                 <div class="form-border">
+                   <%= content_tag :h6, @policy.id %>
+                 </div>
+               <%= f.input :policy_id, as: :hidden, input_html: { value: @policy.id } %>
+             </p>
+
+             <p>
+               <strong>Policy No</strong>
+                 <div class="form-border">
+                   <%= content_tag :h6, @policy.no %>
+                 </div>
+               <%= f.input :policy_id, as: :hidden, input_html: { value: @policy.no } %>
+             </p>
+
+             <p>
+               <strong>Endorsement No.</strong>
+                 <div class="form-border">
+                   <%= content_tag :h6, @policy.endorsement_no %>
+                 </div>
+               <%= f.input :endt_no, as: :hidden, input_html: {value: @policy.endorsement_no}%>
+             </p>
+
+             <p>
+               <strong>Assured Name</strong>
+                 <div class="form-border">
+                   <%= content_tag :h6, @policy.assured.name %>
+                 </div>
+               <%= f.input :assured_id, as: :hidden, input_html: {value: @policy.assured.id} , :label => "" %>
+             </p>
+
+             <p>
+               <strong>Effectivity Date</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, format_date(@policy.eff_date) %>
+                </div>
+               <%= f.input :effective_date, as: :hidden, input_html:{ value: format_date(@policy.eff_date) } %>
+             </p>
+
+             <p>
+               <strong>Original Due Date</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, format_date(@policy.due_date) %>
+                </div>
+               <%= f.input :orig_due, as: :hidden, input_html:{ value: format_date(@policy.due_date) } %>
+             </p>
+
+           </div>
+         </div>
+
+					<legend>Form of Payment</legend>
+
+					<div class="card">
+						<div class="card-body">
+              <%= f.input :payment_type, collection: ["CHECK","CASH"] , :label => "Payment Type" %>
+              <%= f.input :payment_amount, :placeholder => 'Amount paid.' , :label => "Payment Amount" %>
+              <%= f.input :payment, :include_blank => true , :label => "Payment Date" %>
+						</div>
+					</div>
+
+         <legend>Remarks</legend>
+
+         <div class="card">
+           <div class="card-body">
+              <%= f.input :remarks %>
+           </div>
+         </div>
+
+       </fieldset>
+  </div>
+
+  <br>
+  <div class="form-actions text-center">
+    <%= f.button :submit, class: 'btn btn-lg btn-success' %>
+    <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info"  %>
+
+    <% if params[:action] == 'edit' %>
+    <%= link_to 'Show', @policy_resolution, class: "btn btn-info"  %> |
+    <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info" %>
+    <% end %>
+  </div>
+
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Policy Details</h1>
+
+<table class="table" border = 1>
+  <thead>
+    <tr>
+      <%= content_tag :th, "Policy No" %>
+      <%= content_tag :th, "Assured Name" %>
+      <%= content_tag :th, "Intermediary" %>
+      <%= content_tag :th, "TSI Amount" %>
+      <%= content_tag :th, "Premium Amount" %>
+
+    </tr>
+  </thead>
+
+  <tbody>
+      <tr>
+        <%= content_tag :td, @policy.no %>
+        <%= content_tag :td, truncate(@policy.assured.assd_name, length: 40) %>
+        <%= content_tag :td, truncate(@policy.intermediary.name, length: 40) unless @policy.intermediary.nil? %>
+        <%= content_tag :td, @policy.tsi_amt.to_s(:delimited), align: "right" %>
+        <%= content_tag :td, @policy.prem_amt.to_s(:delimited), align: "right" %>
+      </tr>
+  </tbody>
+</table>
+
+
+<%= link_to 'Back', policies_due_today_path , class: "btn btn-info" %>

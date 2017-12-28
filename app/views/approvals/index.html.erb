@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Approvals</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Policy resolution</th>
+      <th>Approval type</th>
+      <th>Approver</th>
+      <th>Approved</th>
+      <th>Remarks</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @approvals.each do |approval| %>
+      <tr>
+        <td><%= link_to(approval.policy_resolution.id, policy_resolution_path(id: approval.policy_resolution.id)) %></td>
+        <td><%= approval.approval_type %></td>
+        <td><%= approval.approver.username if approval.approver %></td>
+        <td><%= approval.approved %></td>
+        <td><%= approval.remarks %></td>
+        <td><%= link_to 'Show', approval, class: "btn btn-info" %></td>
+        <td><%= link_to 'Edit', edit_approval_path(approval), class: "btn btn-info" %></td>
+        <td><%= button_to 'Destroy', approval, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-info" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Approval', new_approval_path, class: "btn btn-info" %>
+
+<br><%= page_entries_info @approvals %><br>
+<%= paginate @approvals, theme: 'twitter-bootstrap-4' %>

@@ -1,0 +1,27 @@
+<h2>Sign up</h2>
+
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= f.error_notification %>
+
+  <% for role in User::ROLES %>
+    <%= check_box_tag "user[roles][#{role}]", role, @user.roles.include?(role), {:name => "user[roles][]"}%>
+    <%= label_tag "user_roles_#{role}", role.to_s.humanize %><br />
+  <% end %>
+    <%= hidden_field_tag "user[roles][]", "" %>
+
+  <div class="form-inputs">
+    <%= f.input :username, required: true, autofocus: true %>
+    <%= f.input :email, required: true, autofocus: true %>
+    <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
+    <%= f.input :password_confirmation, required: true %>
+
+    <%= render 'user_profile_fields', f: f %>
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>

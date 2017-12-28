@@ -1,0 +1,41 @@
+<%= simple_form_for(@user) do |f| %>
+  <%= f.error_notification %>
+  <% if @user.errors.full_messages.any? %>
+    <% @user.errors.full_messages.each do |error_message| %>
+      <%= error_message if @user.errors.full_messages.first == error_message %> <br />
+    <% end %>
+  <% end %>
+
+  <div class="form-inputs">
+
+    <div class="col-sm-6">
+      <%= content_tag :legend, 'Basic Details' %>
+
+      <%= f.input :username, required: true, autofocus: true %>
+      <%= f.input :email, required: true, autofocus: true %>
+      <%= f.input :password, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
+      <%= f.input :password_confirmation%> <!-- , required: true -->
+
+    </div>
+
+    <div class="col-sm-6">
+
+      <%= content_tag :legend, 'Profile' %>
+
+      <%= f.fields_for :profile do |pf| %>
+        <%= pf.input :first_name %>
+        <%= pf.input :last_name %>
+        <%= pf.input :department, collection: ["Accounting","Claims","Marketing","MIS","Underwriting"] %>
+        <%= pf.association :rank %>
+        <%= pf.input :effectivity , input_html:{ value: Date.today} %>
+        <%= pf.input :deactivation , :include_blank => true %>
+      <% end %>
+
+    </div>
+
+  </div>
+
+  <div class="form-actions text-center">
+    <%= f.button :submit, class: 'btn btn-lg btn-success align-center' %>
+  </div>
+<% end %>

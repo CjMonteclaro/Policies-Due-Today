@@ -1,0 +1,8 @@
+<% if show_title? %>
+  <section class="page-title">
+    <%= content_tag :h1 do %>
+      <%= yield(:title) %>
+      <%= yield(:subtitle).html_safe %>
+    <% end %>
+  </section>
+<% end %>

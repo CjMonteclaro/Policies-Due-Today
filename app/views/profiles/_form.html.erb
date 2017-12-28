@@ -1,0 +1,36 @@
+<%= simple_form_for(@profile) do |f| %>
+  <%= f.error_notification %>
+  <% if @profile.errors.full_messages.any? %>
+    <% @profile.errors.full_messages.each do |error_message| %>
+      <%= error_message if @profile.errors.full_messages.first == error_message %> <br />
+    <% end %>
+  <% end %>
+
+
+  <%= content_tag :legend, 'Profile' %>
+
+  <div class="row align-self-center">
+    <div class="form-inputs col-sm-4 bg-light alert-secondary">
+      <%= f.input :first_name %>
+      <%= f.input :last_name %>
+    </div>
+    <div class="form-inputs col-sm-4">
+      <%= f.input :department, collection: ["Accounting","Claims","Marketing","MIS","Underwriting"] %>
+      <%= f.association :rank %>
+    </div>
+    <div class="form-inputs col-sm-4">
+      <%= f.input :effectivity , as: :date , input_html:{ value: Date.today} %>
+      <%= f.input :deactivation , as: :date , :include_blank => true %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-actions col-sm-12 text-center mb-5">
+      <%= link_to 'Show', @profile  %> |
+      <%= link_to 'All Profiles', profiles_path %> |
+
+      <%= link_to 'Policies Due Today', policies_due_today_path %>
+      <%= f.button :submit, class: 'btn btn-lg btn-success' %>
+    </div>
+  </div>
+<% end %>

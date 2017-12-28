@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ranks</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>From</th>
+      <th>To</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ranks.each do |rank| %>
+      <tr>
+        <td><%= rank.name %></td>
+        <td><%= rank.from %></td>
+        <td><%= rank.to %></td>
+        <td><%= link_to 'Show', rank, class: "btn btn-info"  %></td>
+        <td><%= link_to 'Edit', edit_rank_path(rank) , class: "btn btn-info" %></td>
+        <td><%= button_to 'Destroy', rank, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-info" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Rank', new_rank_path, class: "btn btn-info"  %>
+
+<br><%= page_entries_info @ranks %><br>
+<%= paginate @ranks, theme: 'twitter-bootstrap-4' %>

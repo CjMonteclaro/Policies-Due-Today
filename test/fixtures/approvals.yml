@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  policy_resolution: one
+  approval_type: MyString
+  approver_id: 1
+  approved: 2017-12-13
+  remarks: MyText
+
+two:
+  policy_resolution: two
+  approval_type: MyString
+  approver_id: 1
+  approved: 2017-12-13
+  remarks: MyText

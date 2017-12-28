@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  policy_no: MyString
+  endorsement_no: MyString
+  assured_no: 1
+  intermediary_no: 1
+  intermediary_name: MyString
+  effective_date: 2017-12-07
+  premium_due: 9.99
+  credit_term: 1
+  orig_due_date: 2017-12-07
+  extension: 1
+  new_due_date: 2017-12-07
+
+two:
+  policy_no: MyString
+  endorsement_no: MyString
+  assured_no: 1
+  intermediary_no: 1
+  intermediary_name: MyString
+  effective_date: 2017-12-07
+  premium_due: 9.99
+  credit_term: 1
+  orig_due_date: 2017-12-07
+  extension: 1
+  new_due_date: 2017-12-07
