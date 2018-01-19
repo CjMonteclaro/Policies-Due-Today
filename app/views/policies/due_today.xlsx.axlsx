@@ -1,7 +1,7 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Policies_Due_Today") do |sheet|
   sheet.add_row ["Policy_No", "Endorsement_No", "Insured", "Intermediary", "Inception_Date", "Expiry_Date", "Effective_date", "Premium_Amount"]
-  @policies.each do |policy|
+  @initializer.each do |policy|
     sheet.add_row [policy.no, policy.endorsement_no, policy.assured.name, policy.intermediary&.name, policy.incept_date, policy.expiry_date, policy.eff_date, policy.prem_amt]
   end
 end

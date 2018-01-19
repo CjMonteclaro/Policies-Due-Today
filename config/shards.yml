@@ -1,4 +1,6 @@
 octopus:
+  master_shard: <%= ENV['SHARD'] || 'shard_two' %>
+
   environments:
     - development
     - production
@@ -8,9 +10,9 @@ octopus:
         adapter: oracle_enhanced
         username: CPI
         password: CPI12345!
-        host: 172.16.110.31
+        host: 172.16.110.8 #241
         port: 1521
-        database: FTEST
+        database: DEMO  #FGIC
 
     shard_two:
         adapter: mysql2
@@ -32,9 +34,9 @@ octopus:
         adapter: oracle_enhanced
         username: CPI
         password: CPI12345!
-        host: 172.16.110.31
+        host: 172.16.110.8 #241
         port: 1521
-        database: FTEST
+        database: DEMO  #FGIC
 
     shard_two:
       adapter: mysql2

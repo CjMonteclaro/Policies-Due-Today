@@ -1,2 +1,36 @@
-<h1>Policies#index</h1>
-<p>Find me in app/views/policies/index.html.erb</p>
+<h1>Policies Due Today</h1>
+
+<table class="table">
+
+  <thead>
+    <th>Policy No.</th>
+    <th>Policy ID</th>
+    <th>Effectivity</th>
+    <th>Endt No.</th>
+  </thead>
+
+  <tbody>
+
+  <% @policies.group_by(&:no).sort.each do |no, policies| %>
+
+      <tr>
+        <%= content_tag :td, no, rowspan: policies.count + 1 %>
+        <%#= content_tag :td, assured.name, rowspan: policies.count + 1 %>
+      </tr>
+
+      <% policies.each do |policy| %>
+      <tr>
+        <%= content_tag :td, policy.id, class: 'm-0' %>
+        <%= content_tag :td, policy.effectivity, class: 'm-0' %>
+        <%= content_tag :td, "Endorsement: #{policy.endorsement_no}", class: 'bg-primary text-white m-0 p-2' if policy.endorsement_no %>
+      </tr>
+      <% end %>
+    </tbody>
+
+  <% end %>
+
+</table>
+
+<%= page_entries_info @policies %><br>
+<%= paginate @policies, theme: 'twitter-bootstrap-4' %>
+<%#= link_to 'Back to Search', _index_path %>

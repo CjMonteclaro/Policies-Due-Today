@@ -20,6 +20,14 @@
             <%= drop_link 'ARS Approvals', approvals_path %>
           </div>
         </li>
+
+        <li class="nav-item dropdown">
+          <%= link_to "Underwriting", "#", class: 'nav-link dropdown-toggle', id: 'navbarDropdownMenuLink', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } %>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <%= drop_link 'Travel Policies', policies_travel_declarations_path %>
+            <%= drop_link 'Motor Policies', policies_motor_declarations_path %>
+          </div>
+        </li>
       <% end %>
 
       <% if can? :manage, :all %>
@@ -47,7 +55,7 @@
           <%= nav_link "Sign up", new_user_path  %>
           <%= nav_link "Login", new_user_session_path  %>
       <% end %>
-      
+
     </ul>
 
   </div>

@@ -7,11 +7,11 @@ class ApprovalsController < ApplicationController
   def index
 
     if current_user.profile.profile_rank == 'High'
-        @approvals = Approval.where(approval_type: ['Noted', 'Approved']).order(:approval_type, :approved).page(params[:page]).per(10)
+        @approvals = Approval.where(approval_type: ['Noted', 'Approved']).order(:approval_type, :approved, policy_resolution_id: :desc).page(params[:page]).per(10)
       elsif current_user.profile.profile_rank == 'Medium'
-        @approvals = Approval.where(approval_type: ['Reviewed', 'Noted']).order(:approval_type, :approved).page(params[:page]).per(10)
+        @approvals = Approval.where(approval_type: ['Reviewed', 'Noted']).order(:approval_type, :approved, policy_resolution_id: :desc).page(params[:page]).per(10)
       else
-        @approvals = Approval.where(approval_type: 'Reviewed').order(:approval_type, :approved).page(params[:page]).per(10)
+        @approvals = Approval.where(approval_type: 'Reviewed').order(:approval_type, :approved, policy_resolution_id: :desc).page(params[:page]).per(10)
     end
     # current_user.profile.profile_rank == 'High'
     #   @approvals = Approval.where(approval_type: 'Approved')

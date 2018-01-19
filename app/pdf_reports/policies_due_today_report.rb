@@ -20,7 +20,7 @@ class PoliciesDueTodayReport < Prawn::Document
 
       def transaction_rows
           [["Policy_No", "Endorsement_No", "Insured", "Intermediary", "Inception_Date", "Expiry_Date", "Effective_date", "Premium_Amount"]] +
-          Policy.order('policy_id DESC').limit(10).includes(:assured, [:commission_invoice => :intermediary], :pdc_payments, :policy_invoice, :policy_payments).map do |policy|
+          Policy.where(inception: 1.months.ago..Date.today).includes(:assured, [:commission_invoice => :intermediary], :pdc_payments, :policy_invoice, :policy_payments).map do |policy|
              [policy.no, policy.endorsement_no,policy.assured.name, policy.intermediary&.name, policy.incept_date, policy.expiry_date, policy.eff_date, policy.prem_amt]
        end
      end

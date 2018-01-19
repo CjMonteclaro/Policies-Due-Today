@@ -1,0 +1,14 @@
+<%= form_tag("/motors_search", method: "get") do %>
+  <div class="form-row">
+    <div class="form-group col-md-5">
+      <%= label_tag  "FROM" %>
+      <%= date_field_tag :start_date , params[:start_date], class: "form-control" %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= label_tag  "TO" %>
+      <%= date_field_tag :end_date , params[:end_date], class: "form-control" %>
+    </div>
+  </div>
+  <%= submit_tag("Search" , class: "btn mb-2") %>
+
+<% end %>

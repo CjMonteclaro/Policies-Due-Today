@@ -8,8 +8,8 @@
     <%= content_tag :th, "Taxes" %>
     <%= content_tag :th, "Gross Premium" %>
     <%= content_tag :th, "Commission" %>
-    <%= content_tag :th, "Payment Details" %>
     <%= content_tag :th, "PDC Details" %>
+    <%= content_tag :th, "Payment Details" %>
     <%= content_tag :th, "Payment History" %>
     <%= content_tag :th, "Payment Due<br>(if net of Commission)".html_safe %>
     <%= content_tag :th, "Due Date" %>
@@ -21,7 +21,7 @@
       <!-- Policy Details -->
       <td class="col-md-4">
         <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
-        <%= content_tag :p, "Endorsement: #{policy.endorsement_no}", class: 'small label label-primary' if policy.endorsement_no %>
+        <%= content_tag :p, "Endorsement: #{policy.endorsement_no} ", class: 'small label label-primary' if policy.endorsement_no %>
         <%= content_tag :h5, shorten(policy.assured.name, 25) %>
 
         <%= content_tag :b, "Intermediary: #{policy.intermediary&.intm_no} | " %>
@@ -72,17 +72,6 @@
         </p>
       </td>
 
-      <!-- Payment -->
-      <td class="col-md-2">
-        <% policy.policy_payments.where(iss_cd: policy.policy_invoice&.iss_cd).each do |payment| %>
-            <%= content_tag :b, "Total Payments:" %>
-            <%= content_tag :span, format_currency(payment.total_payment) %><br><br>
-            <%= content_tag :b, "Gross Payment Due:" %>
-            <%= content_tag :span, format_currency(payment.balance_due), class: 'label alert-danger' %><br><br>
-            <%= content_tag :p, "Bill No: #{payment.iss_cd}-#{payment.prem_seq_no}-#{payment.installment}", class: 'small bg-primary text-white' %>
-        <% end %>
-      </td>
-
       <!-- PDC -->
       <td class="col-md-2">
         <% policy.pdc_payments.where(iss_cd: policy.policy_invoice&.iss_cd).each do |collection| %>
@@ -96,6 +85,17 @@
             <%= content_tag :p, "APDC No: #{collection.apdc_payment&.prefix}-#{collection.apdc_payment&.source}-#{collection.apdc_payment&.apdc_number}", class: 'small label label-primary'%>
             <%= content_tag :p, "APDC Date: #{format_date(collection.apdc_payment&.date)}", class: 'small label label-primary'%>
             <br><br>
+        <% end %>
+      </td>
+
+      <!-- Payment -->
+      <td class="col-md-2">
+        <% policy.policy_payments.where(iss_cd: policy.policy_invoice&.iss_cd).each do |payment| %>
+        <%= content_tag :b, "Total Payments:" %>
+        <%= content_tag :span, format_currency(payment.total_payment) %><br><br>
+        <%= content_tag :b, "Gross Payment Due:" %>
+        <%= content_tag :span, format_currency(payment.balance_due), class: 'label alert-danger' %><br><br>
+        <%= content_tag :p, "Bill No: #{payment.iss_cd}-#{payment.prem_seq_no}-#{payment.installment}", class: 'small bg-primary text-white' %>
         <% end %>
       </td>
 

@@ -1,2 +1,59 @@
-<h1>Policies#motor_declarations</h1>
-<p>Find me in app/views/policies/motor_declarations.html.erb</p>
+<% title 'Motor Policies' %>
+
+<%= render 'motor_search' %>
+
+  <br>
+
+  <table class="table" border = 1>
+
+    <thead>
+      <tr>
+        <%= content_tag :th, "Policy No" %>
+        <%= content_tag :th, "Endorsement" %>
+        <%= content_tag :th, "Contact Info" %>
+        <%= content_tag :th, "Issue Date" %>
+        <%= content_tag :th, "Effective Date" %>
+        <%= content_tag :th, "Expiry Date" %>
+        <%= content_tag :th, "Vehicle" %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @motor_policies.each do |policy| %>
+        <tr>
+
+          <%= content_tag :td do %>
+            <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
+            <%= content_tag :p, "ID: #{policy.policy_id}", class: 'small' %>
+          <% end %>
+
+          <%= content_tag :td, policy&.endorsement_no %>
+          <td >
+            <%= content_tag :p, "Address: #{policy&.assured.address}" %>
+            <%= content_tag :p, "Contact No.: #{policy&.assured.phone_no}" %>
+          </td>
+          <%= content_tag :td, policy&.issued %>
+          <%= content_tag :td, policy&.effectivity %>
+          <%= content_tag :td, policy&.expiry %>
+          <td >
+            <%= content_tag :p, policy.vehicle&.vehicle_name %>
+            <%= content_tag :p, "Plate No.: #{policy.vehicle&.plate_no}" %>
+            <%= content_tag :p, "Color: #{policy.vehicle&.color}" %>
+            <%= content_tag :p, "Chassis: #{policy.vehicle&.serial_no}"%>
+            <%= content_tag :p, "Motor No.: #{policy.vehicle&.motor_no}"%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <p>
+   <%= link_to "Print(PDF)", policies_motor_declarations_path(@motor_policies, format: 'pdf', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+   |
+   <%= link_to "Print(CSV)", policies_motor_declarations_path(@motor_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+
+  </p>
+  <br>
+  <%= content_tag :div, page_entries_info(@motor_policies) %>
+  <%= paginate @motor_policies, theme: 'twitter-bootstrap-4' %>

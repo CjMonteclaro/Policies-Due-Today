@@ -39,6 +39,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'meta_request'
 end
 
 group :development do
@@ -78,9 +79,9 @@ gem 'prawn-format'
 gem 'prawn-table'
 gem 'responders'
 gem 'fastercsv'
-# gem 'to_xls'
 gem 'rubyzip'
 gem 'axlsx'
 gem 'axlsx_rails'
 gem 'ar-octopus'
 gem 'mysql2'
+gem 'ransack'

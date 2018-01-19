@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  resources :travels do
+    get 'search', on: :collection
+  end
+
   resources :roles
   resources :ranks
   resources :approvals
@@ -15,6 +20,10 @@ Rails.application.routes.draw do
       resources :policy_resolutions
     # devise_for :users
     # resources :users
+    match 'travel_search', to: 'policies#travel_declarations', via: :get
+    match 'motors_search', to: 'policies#motor_declarations', via: :get
+
+
     get 'policies/motor_declarations'
 
     get 'policies/travel_declarations'

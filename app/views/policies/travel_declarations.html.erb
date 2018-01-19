@@ -1,2 +1,57 @@
-<h1>Policies#travel_declarations</h1>
-<p>Find me in app/views/policies/travel_declarations.html.erb</p>
+<% title 'Travel Policies' %>
+
+<%= render 'search_bar' %>
+
+<table class="table" border = 1>
+  <thead>
+    <tr>
+      <%= content_tag :th, "Policy No" %>
+      <%= content_tag :th, "Insured" %>
+      <%= content_tag :th, "Birthdate" %>
+      <%= content_tag :th, "Age" %>
+      <%= content_tag :th, "Policy Term", class: 'col-md-3' %>
+      <%= content_tag :th, "Destination" %>
+      <%= content_tag :th, "TSI" %>
+      <%= content_tag :th, "Destination Class" %>
+    <%= content_tag :th, "Coverage Limit" %>
+      <%= content_tag :th, "Endorsement" %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @travel_policies.each do |policy| %>
+      <tr>
+
+        <td>
+          <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
+        </td>
+
+        <%= content_tag :td, policy.assured.name %>
+        <%= content_tag :td, format_date(policy.accident_item&.birthdate) %>
+        <%= content_tag :td, policy.accident_item&.age %>
+
+        <%= content_tag :td, class: 'col-md-3' do %>
+          <%= format_date(policy.inception) %><br/>
+          <%= format_date(policy.expiry) %><br/>
+          <%= pluralize(policy.duration, 'day') %>
+        <% end %>
+
+        <%#= content_tag :td, policy.accident_item&.destination %>
+        <%= content_tag :td, policy.destination_countries %>
+
+        <%= content_tag :td, format_currency(policy.tsi), :align => "right" %>
+        <%= content_tag :td, policy.destination_class %>
+        <%= content_tag :td, format_currency(policy&.coverage, "USD") %>
+        <%= content_tag :td, policy.endorsement_text&.text %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p>
+   <%= link_to "Print(PDF)", policies_travel_declarations_path(@travel_policies, format: 'pdf', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+  | <%= link_to "Print(CSV)", policies_travel_declarations_path(@travel_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+</p>
+
+  <%= page_entries_info @travel_policies %><br>
+  <%= paginate @travel_policies, theme: 'twitter-bootstrap-4' %>

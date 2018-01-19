@@ -2,7 +2,7 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.association :policy_resolution %>
+    <%= f.association :policy_resolution, label_method: :id %>
     <%= f.input :approval_type %>
     <%= f.input :approver_id %>
     <%= f.input :approved %>

@@ -5,7 +5,7 @@ class PolicyResolutionsController < ApplicationController
   # GET /policy_resolutions
   # GET /policy_resolutions.json
   def index
-    @policy_resolutions = PolicyResolution.all.page(params[:page]).per(10)
+    @policy_resolutions = PolicyResolution.all.order('id DESC').page(params[:page]).per(10)
   end
 
   # GET /policy_resolutions/1
