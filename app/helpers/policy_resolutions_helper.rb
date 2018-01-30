@@ -7,14 +7,6 @@ module PolicyResolutionsHelper
 
   def ar_format_helper(label, value, flag)
     if value.present?
-      # output = case value
-      # when value.type == 'String'
-      #   value
-      # when value.type == 'Decimal'
-      #   format_currency(value)
-      # when value.type == 'Date'
-      #   format_date(value)
-      # end
 
       formatted_value = case flag
       when 1
@@ -30,4 +22,11 @@ module PolicyResolutionsHelper
       end
     end
   end
+
+  def show_row_helper(label, content)
+    content_tag :tr do
+      (content_tag :th, label) + (content_tag :td, content, class: "text-right")
+    end
+  end
+
 end

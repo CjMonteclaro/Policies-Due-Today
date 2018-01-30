@@ -9,8 +9,11 @@ class Assured < ApplicationRecord
   alias_attribute :address2, :mail_addr2
   alias_attribute :address3, :mail_addr3
 
-
   has_many :policies, foreign_key: :assd_no
+
+  ransacker :name, formatter: proc { |v| v.mb_chars.upcase.to_s } do |parent|
+    Arel::Nodes::NamedFunction.new('UPPER',[parent.table[:assd_name]])
+  end
 
   def to_s
     name

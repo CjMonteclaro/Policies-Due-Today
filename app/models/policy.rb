@@ -4,7 +4,6 @@ class Policy < ApplicationRecord
   self.primary_key = "policy_id"
   octopus_establish_connection(:adapter => "oracle_enhanced", :database => "FGIC", :host => "172.16.110.241", :port => "1521", :username => "CPI", :password => "CPI12345!")
 
-
   alias_attribute :id, :policy_id
   alias_attribute :inception, :incept_date
   alias_attribute :expiry, :expiry_date
@@ -36,27 +35,40 @@ class Policy < ApplicationRecord
 
 	has_many :policy_item_perils, foreign_key: :policy_id
 	has_many :perils, through: :policy_item_perils, foreign_key: :peril_cd
-	belongs_to :vehicle, foreign_key: :policy_id
+
+  belongs_to :vehicle, foreign_key: :policy_id
 	has_one :vehicle_body_type, through: :vehicle, foreign_key: :policy_id
 	has_one :vehicle_brand, through: :vehicle, foreign_key: :policy_id
+
+  ransacker :due_date, type: :date do
+    Arel.sql('date(date_due)')
+  end
 
   scope :not_spoiled, -> { where.not(pol_flag: [4,5]) }
   scope :travel_eager_load, -> { includes(:assured, :policy_items, :policy_info, :endorsement_text, :accident_item) }
 
   scope :check_odth, -> { joins(:perils).where('PERIL_CD = ?', 46) }
-  scope :not_trucks, -> { joins(:vehicle_body_type, :vehicle).where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%TRUCK%', '%TRUCK%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%FREEZER%', '%FREEZER%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%CARGO%', '%CARGO%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%ALUMINUM%', '%ALUMINUM%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%CANTER%', '%CANTER%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%DROPSIDE%', '%DROPSIDE%').where.not('TYPE_OF_BODY LIKE ? AND MAKE LIKE ?', '%ELF%', '%ELF%')}
-  scope :no_trucks, -> { joins(:vehicle).ransack(make_not_cont_any: %w(TRUCK FREEZER CARGO ALUMINUM CANTER DROPSIDE ELF)).result   }
+  scope :not_trucks, -> { joins(:vehicle_body_type, :vehicle).where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%TRUCK%', '%TRUCK%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%FREEZER%', '%FREEZER%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%CARGO%', '%CARGO%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%ALUMINUM%', '%ALUMINUM%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%CANTER%', '%CANTER%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%DROPSIDE%', '%DROPSIDE%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%ELF%', '%ELF%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%Elf%', '%Elf%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%ALUM%', '%ALUM%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%TRAILER%', '%TRAILER%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%TRACTOR%', '%TRACTOR%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%TANK%', '%TANK%').where.not('TYPE_OF_BODY LIKE ? OR MAKE LIKE ?', '%SKELETAL%', '%SKELETAL%')}
+
   scope :motor_eager_load, -> { includes(:policy_items, :vehicle, :vehicle_brand, :vehicle_body_type) }
   scope :private_vehicles, -> { where(subline_cd: ["PC","CV"])   }
 
+  ##########
+  # FOR POLICIES DUE TODAY
+  ##########
+
   def no
-      "#{line_cd}-#{subline_cd}-#{source}-#{issue_yy}-#{proper_seq_no}-#{proper_renew_number}"
+    "#{line_cd}-#{subline_cd}-#{source}-#{issue_yy}-#{proper_seq_no}-#{proper_renew_number}"
   end
 
   def endorsement_no
     basic = "#{endt_iss_cd}-#{endt_yy}-#{endorsement_sequence}"
     endorsement_type = "-#{endt_type}" if endt_type?
     endorsement_no = basic + endorsement_type if endt_seq_no?
+  end
+
+  def not_endorsement?
+    self.endorsement_sequence.to_i == 0
   end
 
   def proper_seq_no
@@ -80,10 +92,6 @@ class Policy < ApplicationRecord
     return due_date
   end
 
-  def self.filter_by_due_date
-     self.limit(100).sort_by(&:due_date).reverse!
-  end
-
   def self.to_csv
 		attributes = %w{Policy_No Endorsement_No Insured Intermediary Inception_Date Expiry_Date Effective_date Premium_Amount}
 		CSV.generate(headers: true) do |csv|
@@ -95,42 +103,39 @@ class Policy < ApplicationRecord
 		end
   end
 
-  def self.travel_csv(start_date, end_date)
-		attributes = %w{Policy/Endorsement Insured Birthday Age Inception ExpiryDate Duration Destination TSI DestinationClass CoverageLimit EndorsementText}
-		CSV.generate(headers: true) do |csv|
-			csv << attributes
+  ##########
+  # FOR MOTOR DECLARATION
+  ##########
 
-			policies = Policy.travel_search(start_date, end_date)
-
-			policies.each do |policy|
-				csv << ["#{policy.no} - #{policy.endorsement_no}", policy.assured.name,(policy.accident_item.birthdate unless policy.accident_item.nil?),(policy.accident_item.age unless policy.accident_item.nil?), policy.inception, policy.expiry, policy.duration, policy.destination_countries, policy.tsi, policy.destination_class, policy&.coverage, policy.endorsement_text&.text]
-			end
-		end
+  def self.motors_search(start_date, end_date)
+		self.where(issued: start_date..end_date).private_vehicles.not_spoiled.check_odth.not_trucks.motor_eager_load
+    #.order('subline_cd,iss_cd,pol_seq_no,renew_no')
 	end
 
-  def self.motor_to_csv(start_date,end_date)
-      attributes = %w{PolicyNo Endorsement IssueDate EffectiveDate ExpiryDate Vehicle PerilName SumInsured Premium PremiumRate}
-      CSV.generate(headers: true) do |csv|
-        csv << attributes
-      Policy.motors_search(start_date, end_date).each do |policy|
+  def self.motor_to_csv(motor_policies)
+    attributes = %w{PolicyNo Endorsement ContactNo Address IssueDate EffectiveDate ExpiryDate Vehicle PlateNo Color SerialNo MotorNo PerilName SumInsured Premium PremiumRate}
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+      motor_policies.each do |policy|
 				policy.perils.where(line_cd: "MC").find_each do |peril|
-					policy.policy_item_perils.where(peril_cd: peril).find_each do |item|
 
-        csv << [policy.no, policy.endorsement_no, policy.issued, policy.effectivity, policy.expiry, policy.vehicle&.vehicle_name, peril.shortname, item&.tsi, item&.prem, item.rate ]
-					end
+            csv << [policy.no, policy.endorsement_no, policy&.assured.address, policy&.assured.phone_no, policy.issued, policy.effectivity, policy.expiry, policy.vehicle&.vehicle_name, policy.vehicle&.plate_no, policy.vehicle&.color, policy.vehicle&.serial_no, policy.vehicle&.motor_no ]
 				end
       end
     end
   end
 
+  def address
+    "#{self.address1} #{self.address2} #{self.address3}"
+  end
+
+  ##########
+  # FOR TRAVEL PA
+  ##########
+
   def self.travel_search(start_date,end_date)
     where(issued: start_date..end_date, line_cd: 'PA', subline_cd: 'TPS').not_spoiled.travel_eager_load
   end
-
-  def self.motors_search(start_date, end_date)
-		self.where(issued: start_date..end_date, line_cd: "MC").private_vehicles.not_spoiled.check_odth.not_trucks.motor_eager_load
-    #.order('subline_cd,iss_cd,pol_seq_no,renew_no')
-	end
 
   def duration
     (self.expiry - self.effectivity).to_i + 1
@@ -158,25 +163,39 @@ class Policy < ApplicationRecord
 
   def coverage
 		if self.policy_info&.travel_class.nil? || policy_info&.travel_class.blank?
-					case self.accident_item&.destination_class
-						when "SCHENGEN","schengen"
-							then "50,000"
-						when "WORLDWIDE","worldwide","WORLD WIDE"
-							then "50,000"
-						when "ASIAN","asian"
-							then "20,000"
-						else "Not Specified"
-					end
+			case self.accident_item&.destination_class
+				when "SCHENGEN","schengen"
+					then "50,000"
+				when "WORLDWIDE","worldwide","WORLD WIDE"
+					then "50,000"
+				when "ASIAN","asian"
+					then "20,000"
+				else "Not Specified"
+			end
 		else
-					case self.policy_info&.travel_class
-						when "SCHENGEN","schengen"
-							then "50,000"
-						when "WORLDWIDE","worldwide","WORLD WIDE"
-							then "50,000"
-						when "ASIAN","asian"
-							then "20,000"
-						else "Not Specified"
-					end
+			case self.policy_info&.travel_class
+				when "SCHENGEN","schengen"
+					then "50,000"
+				when "WORLDWIDE","worldwide","WORLD WIDE"
+					then "50,000"
+				when "ASIAN","asian"
+					then "20,000"
+				else "Not Specified"
+			end
+		end
+	end
+
+  def self.travel_csv(travel_policies)
+		attributes = %w{Policy/Endorsement Insured Birthday Age Inception ExpiryDate Duration Destination TSI DestinationClass CoverageLimit EndorsementText TotalPayment}
+		CSV.generate(headers: true) do |csv|
+			csv << attributes
+
+			travel_policies.each do |policy|
+        policy.policy_payments.where(iss_cd: policy.iss_cd).each do |payment|
+
+				  csv << ["#{policy.no} - #{policy.endorsement_no}", policy.assured.name,(policy.accident_item.birthdate unless policy.accident_item.nil?),(policy.accident_item.age unless policy.accident_item.nil?), policy.inception, policy.expiry, policy.duration, policy.destination_countries, policy.tsi, policy.destination_class, policy&.coverage, policy.endorsement_text&.text, payment.total_payment]
+        end
+			end
 		end
 	end
 

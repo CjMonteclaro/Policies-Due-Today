@@ -13,8 +13,7 @@
       <%= content_tag :th, "Destination" %>
       <%= content_tag :th, "TSI" %>
       <%= content_tag :th, "Destination Class" %>
-    <%= content_tag :th, "Coverage Limit" %>
-      <%= content_tag :th, "Endorsement" %>
+      <%= content_tag :th, "Coverage Limit" %>
     </tr>
   </thead>
 
@@ -23,7 +22,7 @@
       <tr>
 
         <td>
-          <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
+          <%= link_to((content_tag :p, "#{policy.no} / #{policy.endorsement_no}"), policy) %>
         </td>
 
         <%= content_tag :td, policy.assured.name %>
@@ -36,22 +35,19 @@
           <%= pluralize(policy.duration, 'day') %>
         <% end %>
 
-        <%#= content_tag :td, policy.accident_item&.destination %>
         <%= content_tag :td, policy.destination_countries %>
 
         <%= content_tag :td, format_currency(policy.tsi), :align => "right" %>
         <%= content_tag :td, policy.destination_class %>
         <%= content_tag :td, format_currency(policy&.coverage, "USD") %>
-        <%= content_tag :td, policy.endorsement_text&.text %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <p>
-   <%= link_to "Print(PDF)", policies_travel_declarations_path(@travel_policies, format: 'pdf', :start_date => params[:start_date], :end_date => params[:end_date]) %>
-  | <%= link_to "Print(CSV)", policies_travel_declarations_path(@travel_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+    <%= link_to "Print(XLSX)", travel_declarations_policies_path(@travel_policies, format: 'xlsx') %>
+  | <%= link_to "Print(CSV)", travel_declarations_policies_path(@travel_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
 </p>
 
-  <%= page_entries_info @travel_policies %><br>
-  <%= paginate @travel_policies, theme: 'twitter-bootstrap-4' %>
+<%= render 'layouts/pagination', object: @travel_policies %>

@@ -23,7 +23,7 @@
         <tr>
 
           <%= content_tag :td do %>
-            <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
+            <%= link_to((content_tag :p, policy.no), policy) %>
             <%= content_tag :p, "ID: #{policy.policy_id}", class: 'small' %>
           <% end %>
 
@@ -49,11 +49,9 @@
   </table>
 
   <p>
-   <%= link_to "Print(PDF)", policies_motor_declarations_path(@motor_policies, format: 'pdf', :start_date => params[:start_date], :end_date => params[:end_date]) %>
+    <%= link_to "Print(XLSX)", motor_declarations_policies_path(@motor_policies, format: 'xlsx') %>
    |
-   <%= link_to "Print(CSV)", policies_motor_declarations_path(@motor_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
-
+    <%= link_to "Print(CSV)", motor_declarations_policies_path(@motor_policies, format: 'csv', :start_date => params[:start_date], :end_date => params[:end_date]) %>
   </p>
-  <br>
-  <%= content_tag :div, page_entries_info(@motor_policies) %>
-  <%= paginate @motor_policies, theme: 'twitter-bootstrap-4' %>
+
+<%= render 'layouts/pagination', object: @motor_policies %>

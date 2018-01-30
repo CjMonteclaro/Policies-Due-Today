@@ -3,14 +3,15 @@ class Intermediary < ApplicationRecord
   self.primary_key = "intm_no"
   octopus_establish_connection(:adapter => "oracle_enhanced", :database => "FGIC", :host => "172.16.110.241", :port => "1521", :username => "CPI", :password => "CPI12345!")
 
-
-
-
   alias_attribute :name, :intm_name
   alias_attribute :type, :intm_type
 
   has_many :commission_invoices, foreign_key: :intrmdry_intm_no
   has_many :policies, through: :commission_invoices, foreign_key: :policy_id
+
+  ransacker :name, formatter: proc { |v| v.mb_chars.upcase.to_s } do |parent|
+    Arel::Nodes::NamedFunction.new('UPPER',[parent.table[:intm_name]])
+  end
 
   def credit_term
     if self.type == "BR"

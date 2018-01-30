@@ -13,4 +13,13 @@ class PolicyItemPeril < ApplicationRecord
   belongs_to :policy, foreign_key: :policy_id
   belongs_to :policy_item, foreign_key: :item_no
   belongs_to :peril, foreign_key: :peril_cd
+
+  def peril_shortname(object)
+    Peril.where(line_cd: object)
+  end
+
+  def find_peril
+    Peril.where(line_cd: self.line_cd, peril_cd: self.peril_cd).first
+  end
+
 end

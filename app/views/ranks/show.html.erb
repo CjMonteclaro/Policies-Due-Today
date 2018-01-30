@@ -1,31 +1,15 @@
-<fieldset class="col-md-7">
-     <legend>Approval Information</legend>
+<div class="row">
+  <div class="col-md-8">
 
-     <div class="panel panel-default">
-       <div class="panel-body">
-           <div class="form-border">
-             <strong>ID:</strong>
-             <%= @rank.id %>
-           </div>
+    <%= content_tag :legend, "Rank Information", class: "p-3 mb-2 bg-secondary text-white" %>
+    <table class = "table" >
+      <%= show_view_row_helper("Rank ID:", @rank.id) %>
+      <%= show_view_row_helper("Name:", @rank.name ) %>
+      <%= show_view_row_helper("From:", @rank.from) %>
+      <%= show_view_row_helper("To:", @rank.to) %>
+    </table>
+  </div>
+</div>
 
-           <div class="form-border">
-             <strong>Name:</strong>
-             <%= @rank.name %>
-           </div>
-
-           <div class="form-border">
-             <strong>From:</strong>
-             <%= @rank.from %>
-           </div>
-
-           <div class="form-border">
-             <strong>To:</strong>
-             <%= @rank.to %>
-           </div>
-       </div>
-     </div>
-
-     <%= link_to 'Edit', edit_rank_path(@rank), class: "btn btn-info"  %> |
-     <%= link_to 'Back', ranks_path, class: "btn btn-info"  %>
-
-</fieldset>
+  <%= link_to 'Edit', edit_rank_path(@rank), class: "btn btn-info"  %> |
+  <%= link_to 'Back', ranks_path, class: "btn btn-info"  %>

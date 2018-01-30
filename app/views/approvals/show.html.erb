@@ -1,36 +1,17 @@
-<fieldset class="col-md-10">
-     <legend>Approval Information</legend>
+<div class="row">
+  <div class="col-md-8">
 
-     <div class="panel panel-default">
-       <div class="panel-body">
-           <div class="form-border">
-             <strong>Policy resolution:</strong>
-             <%= @approval.policy_resolution_id %>
-           </div>
+    <%= content_tag :legend, "Approval Information", class: "p-3 mb-2 bg-secondary text-white" %>
+    <table class = "table" >
+      <%= show_view_row_helper("Policy resolution:", @approval.policy_resolution_id) %>
+      <%= show_view_row_helper("Approval type:", @approval.approval_type) %>
+      <%= show_view_row_helper("Approver:", @approval.approver_id) %>
+      <%= show_view_row_helper("Approved Date:", @approval.approved) %>
+      <%= show_view_row_helper("Remarks:", @approval.remarks) %>
+    </table>
+  </div>
+</div>
 
-           <div class="form-border">
-             <strong>Approval type:</strong>
-             <%= @approval.approval_type %>
-           </div>
-
-           <div class="form-border">
-             <strong>Approver:</strong>
-             <%= @approval.approver_id %>
-           </div>
-
-           <div class="form-border">
-             <strong>Approved Date:</strong>
-             <%= @approval.approved %>
-           </div>
-
-           <div class="form-border">
-             <strong>Remarks:</strong>
-             <%= @approval.remarks %>
-           </div>
-
-       </div>
-     </div>
-
-     <%= link_to 'Edit', edit_approval_path(@approval) , class: "btn btn-info" %> |
-     <%= link_to 'Back', approvals_path , class: "btn btn-info" %>
+  <%= link_to 'Edit', edit_approval_path(@approval) , class: "btn btn-info" %> |
+  <%= link_to 'Back', approvals_path , class: "btn btn-info" %>
 </fieldset>

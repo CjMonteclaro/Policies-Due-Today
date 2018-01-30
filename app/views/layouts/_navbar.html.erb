@@ -15,7 +15,7 @@
         <li class="nav-item dropdown">
           <%= link_to "Accounting", "#", class: 'nav-link dropdown-toggle', id: 'navbarDropdownMenuLink', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } %>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <%= drop_link 'Policies Due Today', policies_due_today_path %>
+            <%= drop_link 'Policies Due Today', due_today_policies_path %>
             <%= drop_link 'Accounts For Resolution', policy_resolutions_path %>
             <%= drop_link 'ARS Approvals', approvals_path %>
           </div>
@@ -24,8 +24,8 @@
         <li class="nav-item dropdown">
           <%= link_to "Underwriting", "#", class: 'nav-link dropdown-toggle', id: 'navbarDropdownMenuLink', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } %>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <%= drop_link 'Travel Policies', policies_travel_declarations_path %>
-            <%= drop_link 'Motor Policies', policies_motor_declarations_path %>
+            <%= drop_link 'Travel Policies', travel_declarations_policies_path %>
+            <%= drop_link 'Motor Policies', motor_declarations_policies_path %>
           </div>
         </li>
       <% end %>
@@ -46,14 +46,14 @@
     <ul class="navbar-nav">
 
       <% if user_signed_in? %>
-          <li class="nav-link">Logged in as <strong><%= current_user.username %></strong>.</li>
-          <%= nav_link('Edit profile', edit_profile_path(id: current_user.profile.id)) %>
-          <%= content_tag :li, class: 'nav-item' do %>
-            <%= button_to("Logout", destroy_user_session_path, method: :delete, class: 'nav-link') %>
-          <% end %>
+        <li class="nav-link">Logged in as <strong><%= current_user.username %></strong>.</li>
+        <%= nav_link('Edit profile', edit_profile_path(id: current_user.profile.id)) %>
+        <%= content_tag :li, class: 'nav-item' do %>
+          <%= button_to("Logout", destroy_user_session_path, method: :delete, class: 'nav-link') %>
+        <% end %>
       <% else %>
-          <%= nav_link "Sign up", new_user_path  %>
-          <%= nav_link "Login", new_user_session_path  %>
+        <%= nav_link "Sign up", new_user_path  %>
+        <%= nav_link "Login", new_user_session_path  %>
       <% end %>
 
     </ul>

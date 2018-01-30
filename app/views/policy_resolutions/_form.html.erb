@@ -56,58 +56,58 @@
 
          <legend>Policy Information</legend>
 
-         <div class="card">
-           <div class="card-body">
-             <p>
-               <strong>Policy ID</strong>
-                 <div class="form-border">
-                   <%= content_tag :h6, @policy.id %>
-                 </div>
-               <%= f.input :policy_id, as: :hidden, input_html: { value: @policy.id } %>
-             </p>
+          <div class="card">
+            <div class="card-body">
+              <p>
+                <strong>Policy ID</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, @policy.id %>
+                </div>
+                <%= f.input :policy_id, as: :hidden, input_html: { value: @policy.id } %>
+              </p>
 
-             <p>
-               <strong>Policy No</strong>
-                 <div class="form-border">
-                   <%= content_tag :h6, @policy.no %>
-                 </div>
-               <%= f.input :policy_id, as: :hidden, input_html: { value: @policy.no } %>
-             </p>
+              <p>
+                <strong>Policy No</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, @policy.no %>
+                </div>
+                <%= f.input :policy_no, as: :hidden, input_html: { value: @policy.no } %>
+              </p>
 
-             <p>
-               <strong>Endorsement No.</strong>
-                 <div class="form-border">
-                   <%= content_tag :h6, @policy.endorsement_no %>
-                 </div>
-               <%= f.input :endt_no, as: :hidden, input_html: {value: @policy.endorsement_no}%>
-             </p>
+              <p>
+                <strong>Endorsement No.</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, @policy.endorsement_no %>
+                </div>
+                <%= f.input :endt_no, as: :hidden, input_html: {value: @policy.endorsement_no}%>
+              </p>
 
-             <p>
-               <strong>Assured Name</strong>
-                 <div class="form-border">
-                   <%= content_tag :h6, @policy.assured.name %>
-                 </div>
-               <%= f.input :assured_id, as: :hidden, input_html: {value: @policy.assured.id} , :label => "" %>
-             </p>
+              <p>
+                <strong>Assured Name</strong>
+                <div class="form-border">
+                  <%= content_tag :h6, @policy.assured.name %>
+                </div>
+                <%= f.input :assured_id, as: :hidden, input_html: {value: @policy.assured.id} %>
+              </p>
 
-             <p>
-               <strong>Effectivity Date</strong>
+              <p>
+                <strong>Effectivity Date</strong>
                 <div class="form-border">
                   <%= content_tag :h6, format_date(@policy.eff_date) %>
                 </div>
-               <%= f.input :effective_date, as: :hidden, input_html:{ value: format_date(@policy.eff_date) } %>
-             </p>
+                <%= f.input :effective_date, as: :hidden, input_html:{ value: format_date(@policy.eff_date) } %>
+              </p>
 
-             <p>
-               <strong>Original Due Date</strong>
+              <p>
+                <strong>Original Due Date</strong>
                 <div class="form-border">
                   <%= content_tag :h6, format_date(@policy.due_date) %>
                 </div>
-               <%= f.input :orig_due, as: :hidden, input_html:{ value: format_date(@policy.due_date) } %>
-             </p>
+                <%= f.input :orig_due, as: :hidden, input_html:{ value: format_date(@policy.due_date) } %>
+              </p>
 
-           </div>
-         </div>
+            </div>
+          </div>
 
 					<legend>Form of Payment</legend>
 
@@ -121,11 +121,11 @@
 
          <legend>Remarks</legend>
 
-         <div class="card">
-           <div class="card-body">
+          <div class="card">
+            <div class="card-body">
               <%= f.input :remarks %>
-           </div>
-         </div>
+            </div>
+          </div>
 
        </fieldset>
   </div>
@@ -136,8 +136,8 @@
     <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info"  %>
 
     <% if params[:action] == 'edit' %>
-    <%= link_to 'Show', @policy_resolution, class: "btn btn-info"  %> |
-    <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info" %>
+      <%= link_to 'Show', @policy_resolution, class: "btn btn-info"  %> |
+      <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info" %>
     <% end %>
   </div>
 

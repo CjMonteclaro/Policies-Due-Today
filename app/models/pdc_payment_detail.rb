@@ -3,8 +3,6 @@ class PdcPaymentDetail < ApplicationRecord
   self.primary_key = "pdc_id"
   octopus_establish_connection(:adapter => "oracle_enhanced", :database => "FGIC", :host => "172.16.110.241", :port => "1521", :username => "CPI", :password => "CPI12345!")
 
-
-
   alias_attribute :amount, :check_amt
   alias_attribute :number, :check_no
   alias_attribute :date, :check_date

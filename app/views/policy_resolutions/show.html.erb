@@ -1,163 +1,67 @@
 <div class="row">
-  <div class="col-md-10">
-    <%= content_tag :h1, "Account Resolution Details" %>
-      <fieldset class="col-md-10">
-         <legend>Request Approval For</legend>
+  <div class="col-md-8">
+    <% title "Account Resolution Details" %>
 
-         <div class="card">
-           <div class="card-body">
-             <div class="form-border">
-               <strong>Request Type:</strong>
-               <%= @policy_resolution.request_type %></td>
-             </div>
+    <%= content_tag :legend, "Request Approval For", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <%= show_row_helper("Request Type:", @policy_resolution.request_type) %>
+        <%= show_row_helper("Extension:", @policy_resolution.extension) %>
+        <%= show_row_helper("Cancelled:", @policy_resolution.cancelled) %>
+        <%= show_row_helper("Reinstated:", @policy_resolution.reinstated) %>
+      </table>
 
-             <div class="form-border">
-               <strong>Extension:</strong>
-               <%= @policy_resolution.extension %>
-             </div>
+    <%= content_tag :legend, "Account Summary", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <%= show_row_helper("Intermediary No:", @policy_resolution.intermediary_id) %>
+        <%= show_row_helper("Intermediary Name:", @policy_resolution.intermediary_name) %>
+        <%= show_row_helper("Credit Term:", @policy_resolution.credit_term) %>
+        <%= show_row_helper("Premium Due:", format_currency(@policy_resolution.premium_due)) %>
+      </table>
 
-             <div class="form-border">
-                <strong>Cancelled:</strong>
-                <%= @policy_resolution.cancelled %>
-             </div>
+    <%= content_tag :legend, "Policy Information", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <%= show_row_helper("Policy ID:", @policy_resolution.policy_id) %>
+        <%= show_row_helper("Policy No:", @policy_resolution.policy_no) %>
+        <%= show_row_helper("Endorsement No:", @policy_resolution.endt_no) %>
+        <%= show_row_helper("Assured No:", @policy_resolution.assured_id) %>
+        <%= show_row_helper("Effective Date:", @policy_resolution.effective_date) %>
+        <%= show_row_helper("Original Due Date:", @policy_resolution.orig_due) %>
+        <%= show_row_helper("New Due Date:", @policy_resolution.new_due) %>
+      </table>
 
-             <div class="form-border">
-                <strong>Reinstated:</strong>
-               <%= @policy_resolution.reinstated %>
-             </div>
+    <%= content_tag :legend, "Form of Payment", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <%= show_row_helper("Payment Type:", @policy_resolution.payment_type) %>
+        <%= show_row_helper("Payment Amount:", @policy_resolution.payment_amount) %>
+        <%= show_row_helper("Payment Date:", @policy_resolution.payment) %>
+      </table>
 
-           </div>
-         </div>
+    <%= content_tag :legend, "Remarks", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table text-center" >
+        <%= show_row_helper(" ", @policy_resolution.remarks) %>
+      </table>
 
-         <legend>Account Summary</legend>
+    <%= content_tag :legend, "Prepared By", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <%= show_row_helper(" ", @policy_resolution.user&.profile&.full_name) %>
+      </table>
 
-         <div class="card">
-           <div class="card-body">
-             <div class="form-border">
-               <strong>Intermediary no:</strong>
-               <%= @policy_resolution.intermediary_id %>
-             </div>
+    <%= content_tag :legend, "Approvals", class: "p-3 mb-2 bg-secondary text-white" %>
+      <table class = "table" >
+        <tr>
+          <td>
+            <%= simple_form_for @approval, url: approvals_path(id: @policy_resolution.id), method: :post do |f| %>
+              <%= f.input :remarks, label: 'Remarks'%>
+              <%= f.button :submit, "Reviewed" if current_user.profile.profile_rank == 'Regular' %>
+              <%= f.button :submit, "Noted" if current_user.profile.profile_rank == 'Medium' %>
+              <%= f.button :submit, "Approved" if current_user.profile.profile_rank == 'High'  %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
 
-             <div class="form-border">
-               <strong>Intermediary name:</strong>
-               <%= @policy_resolution.intermediary_name %>
-             </div>
-
-             <div class="form-border">
-               <strong>Credit term:</strong>
-               <%= @policy_resolution.credit_term %>
-             </div>
-
-             <div class="form-border">
-               <strong>Premium due:</strong>
-               <%= format_currency(@policy_resolution.premium_due) %>
-             </div>
-           </div>
-         </div>
-
-         <legend>Policy Information</legend>
-
-         <div class="card">
-           <div class="card-body">
-             <div class="form-border">
-               <strong>Policy ID:</strong>
-               <%= @policy_resolution.policy_id %>
-             </div>
-
-             <div class="form-border">
-               <strong>Policy no:</strong>
-               <%= @policy_resolution.policy_no %>
-             </div>
-
-             <div class="form-border">
-               <strong>Endorsement no:</strong>
-               <%= @policy_resolution.endt_no %>
-             </div>
-
-             <div class="form-border">
-               <strong>Assured no:</strong>
-               <%= @policy_resolution.assured_id %>
-             </div>
-
-             <div class="form-border">
-               <strong>Effective date:</strong>
-               <%= @policy_resolution.effective_date %>
-             </div>
-
-             <div class="form-border">
-               <strong>Orig due date:</strong>
-               <%= @policy_resolution.orig_due %>
-             </div>
-
-             <div class="form-border">
-               <strong>New due date:</strong>
-               <%= @policy_resolution.new_due %>
-             </div>
-           </div>
-         </div>
-
-          <legend>Form of Payment</legend>
-
-          <div class="card">
-            <div class="card-body">
-              <div class="form-border">
-                <strong>Payment Type:</strong>
-                <%= @policy_resolution.payment_type %>
-              </div>
-
-              <div class="form-border">
-                <strong>Payment Amount:</strong>
-                <%= @policy_resolution.payment_amount %>
-              </div>
-
-              <div class="form-border">
-                <strong>Payment Date:</strong>
-                <%= @policy_resolution.payment %>
-              </div>
-            </div>
-          </div>
-
-         <legend>Remarks</legend>
-
-         <div class="card">
-           <div class="card-body">
-             <div class="form-border">
-               <!-- <strong>Remarks:</strong> -->
-               <%= @policy_resolution.remarks %>
-             </div>
-           </div>
-         </div>
-
-         <legend>Prepared By</legend>
-
-         <div class="card">
-           <div class="card-body">
-               <div class="form-border">
-                 <!-- <strong>Prepared by:</strong> -->
-                 <%= @policy_resolution.user&.profile&.full_name %>
-               </div>
-           </div>
-         </div>
-
-         <div class="card">
-           <div class="card-body">
-               <legend><h1>Approvals</h1></legend>
-               <%= simple_form_for @approval, url: approvals_path(id: @policy_resolution.id), method: :post do |f| %>
-               <%= f.input :remarks %>
-               <%= f.button :submit, "Reviewed" if current_user.profile.profile_rank == 'Regular' %>
-               <%= f.button :submit, "Noted" if current_user.profile.profile_rank == 'Medium' %>
-               <%= f.button :submit, "Approved" if current_user.profile.profile_rank == 'High'  %>
-               <% end %>
-           </div>
-         </div><br>
-         <%= link_to 'Edit', edit_policy_resolution_path(@policy_resolution) , class: "btn btn-info"  %>
-         <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info"  %>
-       </fieldset>
-
+    <%= link_to 'Edit', edit_policy_resolution_path(@policy_resolution) , class: "btn btn-info"  %>
+    <%= link_to 'Back', policy_resolutions_path , class: "btn btn-info"  %>
 
   </div>
-
-
-
-
 </div>

@@ -3,8 +3,6 @@ class PolicyInvoice < ApplicationRecord
   self.primary_key = "prem_seq_no"
   octopus_establish_connection(:adapter => "oracle_enhanced", :database => "FGIC", :host => "172.16.110.241", :port => "1521", :username => "CPI", :password => "CPI12345!")
 
-
-
   alias_attribute :net_premium, :prem_amt
   alias_attribute :total_taxes, :tax_amt
 

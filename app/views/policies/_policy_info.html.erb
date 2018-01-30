@@ -1,0 +1,69 @@
+<div class="row">
+
+  <div class="col-sm-8">
+
+    <% if local_assigns[:mother_policy] %>
+      <%= content_tag :h5, policy_type_tagger(policy.no, mother_policy), class: 'bg-info text-white p-3' %>
+    <% else %>
+      <%= content_tag :h5, policy_type_tagger(policy.endorsement_no), class: 'bg-info text-white p-3' %>
+    <% end %>
+
+    <table class="table table-sm mb-3">
+      <%= show_view_row_helper("Policy Term", "#{format_date(policy.inception)} to #{format_date(policy.expiry)}") %>
+      <%= show_view_row_helper("Issued", format_date(policy.issued)) %>
+      <%= show_view_row_helper("Effectivity", format_date(policy.effectivity)) %>
+    </table>
+
+    <% if local_assigns[:mother_policy] %>
+      <%= content_tag :h5, "ITEM DETAILS", class: 'bg-secondary text-white p-3' %>
+      <table class="table table-sm mb-3">
+        <% policy.policy_items.each do |item| %>
+          <%= show_view_row_helper("Item # #{item.no}", item.title ) %>
+          <tr>
+            <th>Description</th>
+            <td>
+              <%= content_tag :p, item.description %>
+              <%= content_tag :p, item.description2 %>
+            </td>
+          </tr>
+          <%= render 'item_location', policy: policy %>
+        <% end %>
+      </table>
+    <% end %>
+
+    <%= content_tag :h5, "PERILS", class: 'bg-secondary text-white p-3' if policy.policy_item_perils.present? %>
+    <table class="table table-sm <%= "mb-5" if policy.policy_item_perils.present? %>" >
+      <% policy.policy_item_perils.each do |item| %>
+        <tr>
+          <%= content_tag :th, item.find_peril.shortname %>
+          <%= content_tag :td, format_currency(item&.tsi.abs), class: "text-right" %>
+          <%= content_tag :td, format_currency(item&.prem.abs), class: "text-right" %>
+          <%= content_tag :td, number_to_percentage(item.rate, precision: 4), class: "text-right" %>
+        </tr>
+      <% end %>
+    </table>
+
+    <% if local_assigns[:endorsement] %>
+      <%= content_tag :h5, "ENDORSEMENT WORDINGS", class: 'bg-secondary text-white p-3' %>
+      <%= content_tag :p, policy.endorsement_text.text, class: "border p-3" %>
+    <% end %>
+
+  </div>
+
+  <div class="col-sm-4">
+
+    <%= content_tag :h5, "PREMIUM", class: 'bg-secondary text-white p-3' %>
+    <table class="table table-sm">
+      <%= show_view_row_helper("Base Premium", format_currency(policy.prem_amt), true) %>
+
+      <% policy.policy_taxes.where(iss_cd: policy.iss_cd).each do |tax| %>
+        <%= show_view_row_helper(tax.type, format_currency(tax.amount), true) unless tax.amount == 0 %>
+      <% end %>
+
+      <%= show_view_row_helper("Gross Premium", format_currency(policy.policy_invoice&.gross_premium), true, true) %>
+    </table>
+
+  </div>
+
+</div>
+<hr>

@@ -34,11 +34,26 @@ module PoliciesHelper
     end
   end
 
-  def policy_type_helper(policy_type)
-    if policy_type
-      content_tag :span, "Endorsement", class: 'badge badge-pill badge-primary'
+  def policy_type_tagger(number, mother_policy=nil)
+    if mother_policy
+      tag = "Mother Policy"
     else
-      content_tag :span, "Master", class: 'badge badge-pill badge-primary'
+      tag = "Endorsement"
+    end
+
+    (number + content_tag(:span, tag, class: 'badge badge-pill badge-light ml-4 text-dark')).html_safe
+  end
+
+  def show_view_row_helper(label, content, amount_tag=nil, total_tag=nil)
+    content_tag :tr, class: ("h5 bg-success text-white" if total_tag) do
+      (content_tag :th, label) + (content_tag :td, content, class: ("text-right" if amount_tag))
     end
   end
+
+  def show_view_table_helper(label, content, p_class=nil, span_class=nil )
+    content_tag :p, class: ("#{p_class}" if p_class) do
+      (content_tag :b, label) + (content_tag :span, content, class: ("#{span_class}" if span_class))
+    end
+  end
+
 end

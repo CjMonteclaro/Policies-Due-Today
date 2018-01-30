@@ -1,15 +1,8 @@
-
-<% url = Rails.application.routes.recognize_path(request.referrer) %>
-<% last_controller = url[:controller] %>
-<% last_action = url[:action] %>
-
-<% policy.perils.where(line_cd: "#{if last_action == 'motor_declarations' then 'MC' elsif last_action == 'travel_declarations' then 'PA' end }").find_each do |peril| %>
+<% policy.policy_item_perils.each do |item| %>
 <tr>
-    <td><%= content_tag :h5, peril.shortname %></td>
-    <% policy.policy_item_perils.where(peril_cd: peril).find_each do |item| %>
-      <%= content_tag :td, if item.policy.spld_flag == 1 then (format_currency(item&.proper_tsi)) else format_currency(item&.tsi) end, class: "text-right" %>
-      <%= content_tag :td, if item.policy.spld_flag == 1 then (format_currency(item&.proper_prem)) else format_currency(item&.prem ) end, class: "text-right" %>
-      <%= content_tag :td, number_to_percentage(item.rate, precision: 4), class: "text-right" %>
-    <% end %>
+  <%= content_tag :td, per.shortname , class: "h3" %>
+  <%= content_tag :td, format_currency(item&.tsi.abs), class: "text-right" %>
+  <%= content_tag :td, format_currency(item&.prem.abs), class: "text-right" %>
+  <%= content_tag :td, number_to_percentage(item.rate, precision: 4), class: "text-right" %>
 </tr>
 <% end %>

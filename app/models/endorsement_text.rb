@@ -9,5 +9,4 @@ class EndorsementText < ApplicationRecord
   belongs_to :policy, foreign_key: :policy_id
   belongs_to :travel, foreign_key: :policy_id
 
-
 end

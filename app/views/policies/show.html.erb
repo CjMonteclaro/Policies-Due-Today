@@ -1,2 +1,19 @@
-<h1><%= @policy&.no %></h1>
-<p></p>
+<% title @policy.assured.name %>
+
+<%= content_tag :h3, "Policy No. : #{@policy.no}", class: 'mb-5' %>
+
+<table class="col-sm-8 mb-5">
+  <%= show_view_row_helper("Address", @policy.address) %>
+  <%= show_view_row_helper("Intermediary", @policy.intermediary&.name ) %>
+</table>
+
+
+<% @policies.each do |policy| %>
+  <% if policy.not_endorsement? %>
+    <%= render 'policy_info', policy: policy, mother_policy: true %>
+  <% else %>
+    <%= render 'policy_info', policy: policy, endorsement: true %>
+  <% end %>
+<% end %>
+
+<%= link_to 'Back', due_today_policies_path , class: "btn btn-info" %>

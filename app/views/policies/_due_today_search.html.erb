@@ -1,0 +1,8 @@
+<%= search_form_for @due, url: due_today_policies_path, html: { class: 'navbar-search' } do |f| %>
+  <%= f.date_field :inception_gteq, id: 'start', :label => 'From',class: 'input-mini' %> -
+  <%= f.date_field :inception_lteq, id: 'end', :label => 'To',class: 'input-mini' %>
+  <%= f.text_field :assured_name_cont, placeholder: 'Assured Name'%>
+  <%= f.text_field :intermediary_name_cont, placeholder: 'Intermediary Name' %>
+  <%= f.button 'Search!', class: 'btn btn-primary' %>
+  <%= link_to 'Refresh', request.path, class: 'btn btn-secondary' %>
+<% end %>

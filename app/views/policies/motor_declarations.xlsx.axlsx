@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Motor Car Declaration") do |sheet|
+
+  sheet.add_row ["Policy No", "Endorsement","Assured", "Address", "Contact No", "Issue Date", "Effective Date" , "Expiry Date", "Vehicle", "Plate No", "Color", "Serial No", "Motor No ", "Peril Name", "Sum Insured", "Premium", "Premium Rate"]
+
+  @initializer.map do |policy|
+
+    sheet.add_row [policy.no, policy.endorsement_no, policy&.assured.name, policy&.assured.address, policy&.assured.phone_no, policy.issued, policy.effectivity, policy.expiry, policy.vehicle&.vehicle_name, policy.vehicle&.plate_no, policy.vehicle&.color, policy.vehicle&.serial_no, policy.vehicle&.motor_no ]
+
+    end
+
+  end
+
+end

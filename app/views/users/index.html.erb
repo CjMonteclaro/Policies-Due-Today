@@ -24,9 +24,12 @@
   </tbody>
 </table>
 
-<br>
 
-<%= link_to 'New User', new_user_path, class: "btn btn-info"  %>
+<p>
+  <%= link_to 'New User', new_user_path, class: "btn btn-info"  %>
+</p>
 
-<br><%= page_entries_info @users %><br>
-<%= paginate @users, theme: 'twitter-bootstrap-4' %>
+<p>
+  <%= page_entries_info @users %>
+  <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+</p>

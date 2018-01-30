@@ -1,9 +1,11 @@
-<h1>Policies Due Today</h1>
+<% title 'Policies Due Today' %>
+
+<%= render 'due_today_search' %>
 
 <table class="table">
   <thead>
-    <th><%= sortable "policy_id", "Policy Details" %></th>
-    <th><%= sortable "incept_date", "Dates" %></th>
+    <%= content_tag :th, "Policy Details" %>
+    <%= content_tag :th, "Dates" %>
     <%= content_tag :th, "Net Premium" %>
     <%= content_tag :th, "Taxes" %>
     <%= content_tag :th, "Gross Premium" %>
@@ -20,23 +22,20 @@
     <tr>
       <!-- Policy Details -->
       <td class="col-md-4">
-        <%= link_to((content_tag :p, policy.no), policies_details_path(id: policy.id)) %>
-        <%= content_tag :p, "Endorsement: #{policy.endorsement_no} ", class: 'small label label-primary' if policy.endorsement_no %>
-        <%= content_tag :h5, shorten(policy.assured.name, 25) %>
+        <%= link_to((content_tag :p, policy.no), policy) %>
+        <%= show_view_table_helper("Endorsement: ", policy.endorsement_no, 'small label label-primary') if policy.endorsement_no %>
+        <%= content_tag :h5, shorten(policy.assured&.name, 25) %>
 
-        <%= content_tag :b, "Intermediary: #{policy.intermediary&.intm_no} | " %>
-        <%= content_tag :span, shorten(policy.intermediary&.name, 25) %>
+        <%= show_view_table_helper("Intermediary: #{policy.intermediary&.intm_no} | ", shorten(policy.intermediary&.name, 25)) %>
         <%= content_tag :p, "TSI: #{format_currency(policy.tsi_amt)}" %>
       </td>
 
       <!-- Dates -->
       <td class="col-md-3">
-        <%= content_tag :b, "Inception: " %>
-        <%= content_tag :span, format_date(policy.incept_date) %><br>
-        <%= content_tag :b, "Expiry: " %>
-        <%= content_tag :span, format_date(policy.expiry_date) %><br>
-        <%= content_tag :b, "Effectivity: " %>
-        <%= content_tag :span, format_date(policy.eff_date) %>
+        <%= show_view_table_helper("Inception: ", format_date(policy.inception)) %>
+        <%= show_view_table_helper("Expiry: ", format_date(policy.expiry)) %>
+        <%= show_view_table_helper("Effectivity: ", format_date(policy.effectivity)) %>
+
       </td>
 
       <!-- Net Premium -->
@@ -46,13 +45,11 @@
       <td class="col-md-2">
         <% policy.policy_taxes.where(iss_cd: policy.policy_invoice&.iss_cd).each do |tax| %>
           <% if tax.amount > 0 || tax.amount < 0 %>
-            <%= content_tag :b, tax.type %>
-            <%= content_tag :span, format_currency(tax.amount) %><br>
+            <%= show_view_table_helper(tax.type, format_currency(tax.amount)) %>
           <% end %>
-        <% end %><br>
+        <% end %>
 
-        <%= content_tag :b, "Total Taxes: " %>
-        <%= content_tag :span, format_currency(policy.policy_invoice&.total_taxes) %><br>
+        <%= show_view_table_helper("Total Taxes: ", format_currency(policy.policy_invoice&.total_taxes)) %>
       </td>
 
       <!-- Gross Premium -->
@@ -60,57 +57,50 @@
 
       <!-- Commission -->
       <td>
-        <%= content_tag :b, "Gross: " %>
-        <%= content_tag :span, policy.commission_invoice&.gross_commission %><br>
+        <%= show_view_table_helper("Gross: ", policy.commission_invoice&.gross_commission) %>
+        <%= show_view_table_helper("W/Tax: ", policy.commission_invoice&.w_tax) %>
+        <%= show_view_table_helper("W/Net: ", policy.commission_invoice&.net_commission, 'label-info') %>
 
-        <%= content_tag :b, "W/Tax: " %>
-        <%= content_tag :span, policy.commission_invoice&.w_tax %><br>
-
-        <p class="label-info">
-          <%= content_tag :b, "Net: " %>
-          <%= content_tag :span, policy.commission_invoice&.net_commission %>
-        </p>
       </td>
 
       <!-- PDC -->
       <td class="col-md-2">
-        <% policy.pdc_payments.where(iss_cd: policy.policy_invoice&.iss_cd).each do |collection| %>
-            <%= content_tag :b, "Balance Due:" %>
-            <%= content_tag :span, format_currency(collection.amount), class: 'label alert-danger' %><br><br>
-            <%= content_tag :p, "Bank: #{collection.bank&.name} (#{collection.bank&.short_name})", class: 'small label label-primary'%>
-            <%= content_tag :p, "Branch: #{collection.pdc_payment_detail&.bank_branch}", class: 'small label label-primary'%><br><br>
-            <%= content_tag :p, "Check No: #{collection.pdc_payment_detail&.number}", class: 'small label label-primary'%>
-            <%= content_tag :p, "Check Date: #{format_date(collection.pdc_payment_detail&.date)}", class: 'small label label-primary'%>
-            <%= content_tag :p, "Check Amount: #{format_currency(collection.pdc_payment_detail&.amount)}", class: 'small label label-primary'%><br><br>
-            <%= content_tag :p, "APDC No: #{collection.apdc_payment&.prefix}-#{collection.apdc_payment&.source}-#{collection.apdc_payment&.apdc_number}", class: 'small label label-primary'%>
-            <%= content_tag :p, "APDC Date: #{format_date(collection.apdc_payment&.date)}", class: 'small label label-primary'%>
-            <br><br>
+        <% policy.pdc_payments.where(iss_cd: policy.iss_cd).each do |collection| %>
+          <%= show_view_table_helper("Balance Due: ", format_currency(collection.amount), nil, 'label alert-danger') %>
+          <%= show_view_table_helper("Bank: ", "#{collection.bank&.name} #{collection.bank&.short_name}" , 'small label label-primary' )%>
+          <%= show_view_table_helper("Branch: ", collection.pdc_payment_detail&.bank_branch, 'small label label-primary') %>
+          <%= show_view_table_helper("Check No: ", collection.pdc_payment_detail&.number, 'small label label-primary') %>
+          <%= show_view_table_helper("Check Date: ", format_date(collection.pdc_payment_detail&.date), 'small label label-primary') %>
+          <%= show_view_table_helper("Check Amount: ", format_currency(collection.pdc_payment_detail&.amount), 'small label label-primary') %>
+          <%= show_view_table_helper("APDC No: ", " #{collection.apdc_payment&.prefix}-#{collection.apdc_payment&.source}-#{collection.apdc_payment&.apdc_number}", 'small label label-primary') %>
+          <%= show_view_table_helper("APDC Date: ", "#{format_date(collection.apdc_payment&.date)}", 'small label label-primary') %>
         <% end %>
       </td>
 
       <!-- Payment -->
       <td class="col-md-2">
-        <% policy.policy_payments.where(iss_cd: policy.policy_invoice&.iss_cd).each do |payment| %>
-        <%= content_tag :b, "Total Payments:" %>
-        <%= content_tag :span, format_currency(payment.total_payment) %><br><br>
-        <%= content_tag :b, "Gross Payment Due:" %>
-        <%= content_tag :span, format_currency(payment.balance_due), class: 'label alert-danger' %><br><br>
-        <%= content_tag :p, "Bill No: #{payment.iss_cd}-#{payment.prem_seq_no}-#{payment.installment}", class: 'small bg-primary text-white' %>
+        <% policy.policy_payments.where(iss_cd: policy.iss_cd).each do |payment| %>
+        <%= show_view_table_helper("Total Payments: ", format_currency(payment.total_payment)) %>
+        <%= show_view_table_helper("Gross Payment Due: ", format_currency(payment.balance_due), nil, 'label alert-danger') %>
+        <%= show_view_table_helper("Bill No: ", "#{payment.iss_cd}-#{payment.prem_seq_no}-#{payment.installment}", 'small bg-primary text-white') %>
         <% end %>
       </td>
 
       <!-- Payment History -->
       <td class="col-md-2">
         <% policy.premium_collections.where(issue_code: policy.commission_invoice&.iss_cd).each do |paid| %>
-          <%= content_tag :p, "Paid Premium: #{paid.premium}" %>
-          <%= content_tag :p, "Paid Tax: #{paid.tax}" %>
+          <%= show_view_table_helper("Paid Premium: ", paid.premium) %>
+          <%= show_view_table_helper("Paid Tax: ", paid.tax) %>
+
           <% paid.order_of_payments.each do |receipt | %>
-            <%= content_tag :p, "Official Reciept No: #{receipt.or_no}" %>
-            <%= content_tag :p, "Official Reciept Date: #{receipt.or_date}" %>
+            <%= show_view_table_helper("Official Reciept No: ", receipt.or_no) %>
+            <%= show_view_table_helper("Official Reciept Date: ", receipt.or_date) %>
           <% end %>
+
           <% paid.account_transactions.each do | transaction | %>
-            <%= content_tag :p, "Journal Voucher No: #{transaction.journal_voucher}" if transaction.journal_voucher?  %>
+            <%= show_view_table_helper("Journal Voucher No: ", transaction.journal_voucher) if transaction.journal_voucher? %>
           <% end %>
+
         <% end %>
       </td>
 
@@ -125,15 +115,12 @@
   </tr>
   <% end %>
 
-  <%# for policy in @policies %>
-  <%# end %>
 </table>
 
 <p>
-    <%= link_to "Print(PDF)", policies_due_today_path(@policies, format: 'pdf'), class: "btn btn-info" %>
-    <%= link_to "Print(CSV)", policies_due_today_path(@policies, format: 'csv'), class: "btn btn-info" %>
-    <%= link_to "Print(XLSX)", policies_due_today_path(@policies, format: 'xlsx'), class: "btn btn-info" %>
+    <%= link_to "Print(PDF)", due_today_policies_path(@policies, format: 'pdf'), class: "btn btn-info" %>
+    <%= link_to "Print(CSV)", due_today_policies_path(@policies, format: 'csv'), class: "btn btn-info" %>
+    <%= link_to "Print(XLSX)", due_today_policies_path(@policies, format: 'xlsx'), class: "btn btn-info" %>
 </p>
 <%= page_entries_info @policies %><br>
 <%= paginate @policies, theme: 'twitter-bootstrap-4' %>
-<%#= link_to 'Back to Search', _index_path %>

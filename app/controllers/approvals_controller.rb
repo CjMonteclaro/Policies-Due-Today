@@ -13,9 +13,7 @@ class ApprovalsController < ApplicationController
       else
         @approvals = Approval.where(approval_type: 'Reviewed').order(:approval_type, :approved, policy_resolution_id: :desc).page(params[:page]).per(10)
     end
-    # current_user.profile.profile_rank == 'High'
-    #   @approvals = Approval.where(approval_type: 'Approved')
-    #
+    
   end
 
   # GET /approvals/1

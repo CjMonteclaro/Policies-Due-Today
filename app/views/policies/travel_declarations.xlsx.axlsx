@@ -1,0 +1,15 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Travel PA Declaration") do |sheet|
+
+  sheet.add_row ["Policy/Endorsement", "Insured", "Birthdate", "Age", "Inception Date", "Expiry Date", "Duration", "Destination", "TSI", "Destination Class",  "Coverage Limit", "EndorsementText", "Total Payment"]
+
+  @initializer.map do |policy|
+    policy.policy_payments.where(iss_cd: policy.iss_cd).each do |payment|
+
+      sheet.add_row ["#{policy.no} - #{policy.endorsement_no}", policy.assured.name,(policy.accident_item.birthdate unless policy.accident_item.nil?),(policy.accident_item.age unless policy.accident_item.nil?), policy.inception, policy.expiry, policy.duration, policy.destination_countries, policy.tsi, policy.destination_class, policy&.coverage, policy.endorsement_text&.text, payment.total_payment]
+
+    end
+  end
+
+end

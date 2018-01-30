@@ -4,7 +4,6 @@ class PolicyInfo < ApplicationRecord
 	self.primary_key = "policy_id"
   octopus_establish_connection(:adapter => "oracle_enhanced", :database => "FGIC", :host => "172.16.110.241", :port => "1521", :username => "CPI", :password => "CPI12345!")
 
-
 	alias_attribute :id, :policy_id
 	alias_attribute :general_info, :gen_info
 	alias_attribute :general_info1, :gen_info01

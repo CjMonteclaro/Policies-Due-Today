@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource_or_scope)
-   policies_due_today_path
+   due_today_policies_path
   end
 
   def after_sign_out_path_for(resource_or_scope)

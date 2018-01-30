@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  devise_for :users, path: :sessions
+  resources :users
+
   resources :travels do
     get 'search', on: :collection
   end
@@ -7,48 +10,25 @@ Rails.application.routes.draw do
   resources :roles
   resources :ranks
   resources :approvals
-  devise_for :users, path: :sessions
+  resources :profiles
+  # devise_for :accounts
+  resources :policy_resolutions
+  # devise_for :users
+  # resources :users
+  match 'travel_search', to: 'policies#travel_declarations', via: :get
+  match 'motors_search', to: 'policies#motor_declarations', via: :get
 
 
-# get 'users/new'
-# post 'users/new'
-  # authenticated :user do
+    # get 'policies/motor_declarations'
+    #
+    # get 'policies/travel_declarations'
 
-    resources :users
-    resources :profiles
-    # devise_for :accounts
-      resources :policy_resolutions
-    # devise_for :users
-    # resources :users
-    match 'travel_search', to: 'policies#travel_declarations', via: :get
-    match 'motors_search', to: 'policies#motor_declarations', via: :get
+  resources :policies do
+    collection { get :due_today }
+    collection { get :motor_declarations }
+    collection { get :travel_declarations }
+  end
 
-
-    get 'policies/motor_declarations'
-
-    get 'policies/travel_declarations'
-
-    get 'policies/index'
-
-    get 'policies/show'
-
-    get 'policies/new'
-
-    post 'policies/create'
-
-    get 'policies/due_today'
-
-    get 'policies/motor_declation'
-
-    get 'policies/travel_declaration'
-
-    get 'policies/details'
-
-    # # root to: 'profiles#index'
-    # authenticated :user do
-    #   root to: 'policies#due_today'
-    # end
-    # root to: redirect('credentials/sign_in')
-      root to: 'users#new' #, as: :authenticated_root
+  root to: 'users#new'
 
 end

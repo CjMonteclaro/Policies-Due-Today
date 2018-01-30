@@ -5,15 +5,14 @@
   <table class="table">
     <thead>
       <tr>
-          <th>Request Type</th>
-          <th class="col-md-4">Policy Details</th>
-          <th>Premium due</th>
-          <th>Orig Credit Term</th>
-          <th>Requested Resolution/s</th>
-          <th>Remedial Payment/s</th>
-          <th colspan="2"></th>
-        </tr>
-      </thead>
+        <th>Request Type</th>
+        <th class="col-md-4">Policy Details</th>
+        <th>Premium due</th>
+        <th>Orig Credit Term</th>
+        <th>Requested Resolution/s</th>
+        <th>Remedial Payment/s</th>
+        <th colspan="2"></th>
+      </tr>
     </thead>
 
     <tbody>
@@ -76,7 +75,7 @@
 <br>
 
 <%= link_to 'New Policy Resolution', new_policy_resolution_path , class: "btn btn-info"  %>
-<%= link_to "Back to Policies Due Today", policies_due_today_path, class: "btn btn-info"  %>
+<%= link_to "Back to Policies Due Today", due_today_policies_path, class: "btn btn-info"  %>
 
 <br><%= page_entries_info @policy_resolutions %><br>
 <%= paginate @policy_resolutions, theme: 'twitter-bootstrap-4' %>

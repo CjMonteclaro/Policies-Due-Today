@@ -6,6 +6,6 @@ class Peril < ApplicationRecord
   alias_attribute :shortname, :peril_sname
   alias_attribute :name, :peril_name
 
-  has_many :policy_item_perils, foreign_key: :peril_cd
-  has_many :policies, through: :policy_item_perils, foreign_key: :policy_id
+  has_one :policy_item_peril, foreign_key: :peril_cd
+  has_many :policies, through: :policy_item_peril, foreign_key: :policy_id
 end

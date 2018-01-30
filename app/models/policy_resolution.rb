@@ -11,5 +11,4 @@ class PolicyResolution < ApplicationRecord
     self.new_due = orig_due + extension
   end
 
-
 end

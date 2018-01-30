@@ -1,32 +1,15 @@
-<fieldset class="col-md-7">
-     <legend>Approval Information</legend>
+<div class="row">
+  <div class="col-md-8">
 
-     <div class="panel panel-default">
-       <div class="panel-body">
-           <div class="form-border">
-             <strong>User ID:</strong>
-             <%= @profile.user_id %>
-           </div>
+    <%= content_tag :legend, "Profile Information", class: "p-3 mb-2 bg-secondary text-white" %>
+    <table class = "table" >
+      <%= show_view_row_helper("User ID:", @profile.user_id) %>
+      <%= show_view_row_helper("Full Name:", @profile.full_name ) %>
+      <%= show_view_row_helper("Department:", @profile.department) %>
+      <%= show_view_row_helper("Rank:", @profile.rank.name) %>
+    </table>
+  </div>
+</div>
 
-           <div class="form-border">
-             <strong>Full Name:</strong>
-             <%=  @profile.full_name %>
-           </div>
-
-           <div class="form-border">
-             <strong>Department:</strong>
-             <%= @profile.department %>
-           </div>
-
-           <div class="form-border">
-             <strong>Rank:</strong>
-             <%= @profile.rank.name %>
-           </div>
-
-       </div>
-     </div>
-
-     <%= link_to 'Edit', edit_profile_path(@profile) , class: "btn btn-info"  %> |
-     <%= link_to 'Back', profiles_path, class: "btn btn-info"  %>
-
-</fieldset>
+  <%= link_to 'Edit', edit_profile_path(@profile) , class: "btn btn-info"  %> |
+  <%= link_to 'Back', profiles_path, class: "btn btn-info"  %>
